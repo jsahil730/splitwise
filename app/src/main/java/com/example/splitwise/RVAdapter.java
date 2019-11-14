@@ -10,8 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
@@ -32,10 +30,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v;
         if (activity_tab) {
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_card_layout,parent,false);
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_activity_card,parent,false);
         }
         else {
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.expense_card_layout,parent,false);
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_expense_card,parent,false);
         }
         return new ViewHolder(v);
     }

@@ -6,7 +6,16 @@
 
     <item
         android:id="@+id/sign_out"
-        android:icon="@drawable/ic_menu_black_24dp"
         android:title="@string/sign_out"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/settings"
+        android:title="Settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/add_friend"
+        android:title="Add Friend"
         app:showAsAction="never" />
 </menu>

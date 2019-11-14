@@ -7,4 +7,6 @@
     <string name="sign_out">Sign Out</string>
     <string name="UserCollection"> Users</string>
     <string name="FriendsCollection">Friends</string>
+    <string name="add_friend">Enter user ID here</string>
+    <string name="finish_button">Done</string>
 </resources>

@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,6 +32,8 @@
             android:theme="@style/AppTheme.ActionBar">
 
         </activity>
+        <activity android:name=".ui.add_friend.AddFriend"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
