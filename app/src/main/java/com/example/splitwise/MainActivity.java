@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        firestoreHelper.addFriend("atulya@splitwise.clone");
     }
 
     @Override
