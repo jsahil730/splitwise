@@ -19,6 +19,9 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
@@ -49,6 +52,13 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        List<String> users = new ArrayList<>();
+        users.add("anubhav@splitwise.clone");
+        users.add("atulya@splitwise.clone");
+        users.add("sahil@splitwise.clone");
+
+        firestoreHelper.create_group(users,"group1");
 
 
     }

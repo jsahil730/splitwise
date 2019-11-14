@@ -10,4 +10,9 @@
     <string name="user_groups">GroupList</string>
     <string name="add_friend">Enter user ID here</string>
     <string name="finish_button">Done</string>
+    <string name="GroupsCollection">Groups</string>
+    <string name="GroupUsers">Group Users</string>
+    <string name="borrowersCollection">Borrowers</string>
+    <string name="groupTransactionCollection">Group Transactions</string>
+    <string name="nonGroupTransactionCollection">Non Group Transactions</string>
 </resources>
