@@ -15,6 +15,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.List;
+
 public class FirestoreHelper {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -25,6 +27,9 @@ public class FirestoreHelper {
     private String userId;
     private Resources res;
     private Context context;
+
+    private CollectionReference groupsRef;
+
 
     public FirestoreHelper() {
     }
@@ -38,12 +43,13 @@ public class FirestoreHelper {
         userColRef = db.collection(res.getString(R.string.UserCollection));
         userRef = userColRef.document(userId);
         friendsColRef = userRef.collection(res.getString(R.string.FriendsCollection));
+        groupsRef= db.collection(res.getString(R.string.GroupsCollection));
         this.context = context;
 
     }
 
     public void addUserDetails(String name) {
-        IdTypeDoc user = new IdTypeDoc(name, userId);
+        IdTypeDoc user = new IdTypeDoc(name);
         userRef.set(user).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -80,7 +86,7 @@ public class FirestoreHelper {
 
                                             if (documentSnapshot.exists()) {
                                                 IdTypeDoc friend_to_be_added = documentSnapshot.toObject(IdTypeDoc.class);
-                                                AmountTypeDoc friendDoc = new AmountTypeDoc(to_be_added, friend_to_be_added.getName(), 0);
+                                                AmountTypeDoc friendDoc = new AmountTypeDoc(friend_to_be_added.getName(), 0);
 
                                                 main_friends.document(to_be_added).set(friendDoc);
 
@@ -112,7 +118,6 @@ public class FirestoreHelper {
                 });
     }
 
-
     /**
      *
      * above functions end here
@@ -125,4 +130,54 @@ public class FirestoreHelper {
         add_one_direction(friendId,userId);
 
     }
+
+    public void create_group(final List<String> members, final String group_name){
+
+        for(String member1: members){
+            for(String member2: members){
+                add_one_direction(member1,member2);
+            }
+        }
+
+        IdTypeDoc new_group = new IdTypeDoc(group_name);
+
+        groupsRef.add(new_group)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(final DocumentReference documentReference) {
+                        String group_ID=documentReference.getId();
+                        final CollectionReference groupUserscollRef = documentReference.collection(res.getString(R.string.GroupUsers));
+
+                        for(final String mem: members){
+                            DocumentReference memberdocref = userColRef.document(mem);
+                            memberdocref.get()
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                            IdTypeDoc user_mem = documentSnapshot.toObject(IdTypeDoc.class);
+                                            AmountTypeDoc to_add = new AmountTypeDoc(user_mem.getName(),0);
+                                            groupUserscollRef.document(mem).set(to_add);
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(context,e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                            memberdocref.collection(res.getString(R.string.user_groups)).document(group_ID).set(new AmountTypeDoc(group_name,0));
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
 }
