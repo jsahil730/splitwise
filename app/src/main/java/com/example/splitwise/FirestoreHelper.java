@@ -2,6 +2,7 @@ package com.example.splitwise;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Pair;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,7 +15,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FirestoreHelper {
@@ -177,6 +180,34 @@ public class FirestoreHelper {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+
+    }
+
+    public List<Pair<String,String>> getFriendList()
+    {
+        List<Pair<String,String>> ret= new ArrayList<>();
+
+        String myName=userRef.get().getResult().toObject(IdTypeDoc.class).getName();
+
+        ret.add(new Pair<String, String>(userId,myName));
+        QuerySnapshot queryDocumentSnapshots= friendsColRef.get()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .getResult();
+
+        for(DocumentSnapshot documentSnapshot: queryDocumentSnapshots)
+        {
+            ret.add(new Pair<String, String>(documentSnapshot.getId(),documentSnapshot.toObject(IdTypeDoc.class).getName()));
+        }
+
+
+
+
+        return ret;
 
     }
 
