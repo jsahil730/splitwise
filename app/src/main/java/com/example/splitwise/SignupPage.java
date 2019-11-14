@@ -50,8 +50,8 @@ public class SignupPage extends AppCompatActivity {
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
                 String userId= userIdEditText.getText().toString();
-                String name= nameEditText.getText().toString();
-                String password= passwordEditText.getText().toString();
+                final String name= nameEditText.getText().toString();
+                final String password= passwordEditText.getText().toString();
 
 
                 if(userId.equals("")|| name.equals("")|| password.equals(""))
@@ -71,9 +71,14 @@ public class SignupPage extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     if(task.isSuccessful())
                                     {
+                                        FirestoreHelper firestoreHelper=new FirestoreHelper(SignupPage.this);
+                                        firestoreHelper.addUserDetails(name);
+
                                         userIdEditText.setText("");
                                         passwordEditText.setText("");
                                         nameEditText.setText("");
+
+
 
                                         Intent intent= new Intent(SignupPage.this,MainActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
