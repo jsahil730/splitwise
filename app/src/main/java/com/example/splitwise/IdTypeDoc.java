@@ -2,16 +2,16 @@ package com.example.splitwise;
 
 import com.google.firebase.firestore.Exclude;
 
-public class User {
+public class IdTypeDoc {
 
     private String name;
-    private String userID;
+    private String docID;
 
-    public User(){}
+    public IdTypeDoc(){}
 
-    public User(String name, String userID) {
+    public IdTypeDoc(String name, String userID) {
         this.name = name;
-        this.userID = userID;
+        this.docID = userID;
     }
 
     public String getName() {
@@ -19,7 +19,7 @@ public class User {
     }
 
     @Exclude
-    public String getUserID() {
-        return userID;
+    public String getDocID() {
+        return docID;
     }
 }

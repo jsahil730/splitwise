@@ -53,7 +53,7 @@ public class LoginPage extends AppCompatActivity {
                 if(userId.equals("")||password.equals(""))
                 {
                     Toast.makeText(LoginPage.this,
-                            "User ID and Password cannot be empty", Toast.LENGTH_SHORT).show();
+                            "IdTypeDoc ID and Password cannot be empty", Toast.LENGTH_SHORT).show();
 
                 }
                 else

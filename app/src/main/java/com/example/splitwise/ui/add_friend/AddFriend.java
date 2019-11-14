@@ -10,7 +10,9 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import com.example.splitwise.FirestoreHelper;
 import com.example.splitwise.MainActivity;
 import com.example.splitwise.R;
 
@@ -19,6 +21,7 @@ public class AddFriend extends AppCompatActivity {
     EditText friend_id;
     Button finish_button;
     ProgressBar progressBar;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,6 +31,10 @@ public class AddFriend extends AppCompatActivity {
         friend_id = findViewById(R.id.add_friend);
         finish_button = findViewById(R.id.save_friend);
         progressBar = findViewById(R.id.progressBar);
+        toolbar= findViewById(R.id.toolbar);
+        final FirestoreHelper firestoreHelper=new FirestoreHelper(this);
+
+        toolbar.setTitle("  Add Friend");
 
         finish_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +48,7 @@ public class AddFriend extends AppCompatActivity {
                 }
                 else {
 
-                    //Add your functions here
+                    firestoreHelper.addFriend(friend_user_id);
 
                     progressBar.setVisibility(View.GONE);
                     Intent intent = new Intent(AddFriend.this, MainActivity.class);

@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        firestoreHelper.addFriend("atulya@splitwise.clone");
+
     }
 
     @Override
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void add_friend_func() {
         Intent intent = new Intent(this, AddFriend.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
         startActivity(intent);
     }
 }

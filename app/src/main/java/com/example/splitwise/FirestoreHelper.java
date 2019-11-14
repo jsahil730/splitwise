@@ -43,7 +43,7 @@ public class FirestoreHelper {
     }
 
     public void addUserDetails(String name) {
-        User user = new User(name, userId);
+        IdTypeDoc user = new IdTypeDoc(name, userId);
         userRef.set(user).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -79,8 +79,8 @@ public class FirestoreHelper {
                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
 
                                             if (documentSnapshot.exists()) {
-                                                User friend_to_be_added = documentSnapshot.toObject(User.class);
-                                                FriendDoc friendDoc = new FriendDoc(to_be_added, friend_to_be_added.getName(), 0);
+                                                IdTypeDoc friend_to_be_added = documentSnapshot.toObject(IdTypeDoc.class);
+                                                AmountTypeDoc friendDoc = new AmountTypeDoc(to_be_added, friend_to_be_added.getName(), 0);
 
                                                 main_friends.document(to_be_added).set(friendDoc);
 

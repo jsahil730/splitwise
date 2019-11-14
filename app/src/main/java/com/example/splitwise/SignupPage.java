@@ -92,7 +92,7 @@ public class SignupPage extends AppCompatActivity {
                                         // Toast.makeText(signupPage.this,
                                         //         task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                         Toast.makeText(SignupPage.this,
-                                                "User ID must not contain special characters like @,(,),etc, or '.' at the ends", Toast.LENGTH_LONG).show();
+                                                "IdTypeDoc ID must not contain special characters like @,(,),etc, or '.' at the ends", Toast.LENGTH_LONG).show();
                                     }
                                     else
                                     {
