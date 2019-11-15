@@ -1,4 +1,4 @@
-package com.example.splitwise;
+package com.example.splitwise.ui.main;
 
 import android.content.Context;
 import android.util.Pair;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.splitwise.R;
 
 import java.util.List;
 

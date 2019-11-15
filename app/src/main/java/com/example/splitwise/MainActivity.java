@@ -2,6 +2,7 @@ package com.example.splitwise;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,8 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.splitwise.login_or_signup.SignupPage;
 import com.example.splitwise.ui.add.AddFriend;
 import com.example.splitwise.ui.add.CreateGroup;
+import com.example.splitwise.ui.add.User;
 import com.example.splitwise.ui.main.SectionsPagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -53,10 +56,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-
-
-
     }
 
     @Override
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.sign_out:
                 firebaseAuth.signOut();
 
-                Intent intent1=new Intent(getApplicationContext(),SignupPage.class);
+                Intent intent1=new Intent(getApplicationContext(), SignupPage.class);
 
                 intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent1);
@@ -86,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.create_group:
                 Intent intent4 = new Intent(this, CreateGroup.class);
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("user_list",new ArrayList<User>());
+                intent4.putExtras(bundle);
+
                 startActivity(intent4);
                 return true;
             default:

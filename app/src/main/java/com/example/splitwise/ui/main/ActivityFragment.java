@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.splitwise.R;
-import com.example.splitwise.RVAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

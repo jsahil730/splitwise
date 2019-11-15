@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.splitwise.ui.add.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -198,14 +199,10 @@ public class FirestoreHelper {
 
     }
 
-    public List<Pair<String,String>> getFriendList()
+    public ArrayList<User> getFriendList()
     {
-        List<Pair<String,String>> ret= new ArrayList<>();
-
-        String myName=userRef.get().getResult().toObject(IdTypeDoc.class).getName();
-
-        ret.add(new Pair<String, String>(userId,myName));
-        QuerySnapshot queryDocumentSnapshots= friendsColRef.get()
+        ArrayList<User> ret= new ArrayList<>();
+        QuerySnapshot queryDocumentSnapshots= friendsColRef.orderBy("name").get()
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -214,15 +211,13 @@ public class FirestoreHelper {
                 })
                 .getResult();
 
-        for(DocumentSnapshot documentSnapshot: queryDocumentSnapshots)
-        {
-            ret.add(new Pair<String, String>(documentSnapshot.getId(),documentSnapshot.toObject(IdTypeDoc.class).getName()));
+        for(DocumentSnapshot documentSnapshot: queryDocumentSnapshots) {
+            ret.add(new User(documentSnapshot.getId(),documentSnapshot.toObject(IdTypeDoc.class).getName()));
         }
-
-
-
-
         return ret;
+    }
 
+    public User getMyData() {
+        return new User(userId,userRef.get().getResult().toObject(IdTypeDoc.class).getName());
     }
 }

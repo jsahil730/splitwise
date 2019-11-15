@@ -27,12 +27,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/textview"
-                android:id="@+id/name"
+                android:id="@+id/friend_name"
                 android:layout_toRightOf="@+id/image"
                 android:textColor="#000"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="30dp"
                 android:textSize="17sp"/>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_check_14dp"
+                android:layout_centerVertical="true"
+                android:visibility="gone" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 

@@ -12,7 +12,7 @@
         <activity android:name=".ui.add.GetGroupUsers"></activity>
         <activity android:name=".ui.add.CreateGroup" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".login_or_signup.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
@@ -22,10 +22,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginPage"
+            android:name=".login_or_signup.LoginPage"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SignupPage"
+            android:name=".login_or_signup.SignupPage"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"

@@ -19,7 +19,7 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/image"
+                android:id="@+id/image_group"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:clickable="true"
@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
-                android:layout_toRightOf="@+id/image"
+                android:layout_toRightOf="@+id/image_group"
                 android:orientation="vertical">
 
                 <TextView

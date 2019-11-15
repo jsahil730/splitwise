@@ -7,13 +7,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.splitwise.FirestoreHelper;
 import com.example.splitwise.MainActivity;
 import com.example.splitwise.R;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class CreateGroup extends AppCompatActivity {
 
@@ -22,6 +28,7 @@ public class CreateGroup extends AppCompatActivity {
     Toolbar toolbar;
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
+    ArrayList<User> list_users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +44,13 @@ public class CreateGroup extends AppCompatActivity {
         recyclerView = findViewById(R.id.users_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new FriendRVAdapter(false);
-        recyclerView.setAdapter(adapter);
+        list_users = new ArrayList<User>();
 
-        group_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+        final FirestoreHelper firestoreHelper = new FirestoreHelper(this);
+        list_users.add(firestoreHelper.getMyData());
+
+        adapter = new FriendRVAdapter(list_users,this);
+        recyclerView.setAdapter(adapter);
 
         finish_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,10 +60,16 @@ public class CreateGroup extends AppCompatActivity {
                 if (groupName.isEmpty()) {
                     Toast.makeText(CreateGroup.this,"Group name must not be empty!",Toast.LENGTH_LONG).show();
                 }
-//                else if (group_user_ids.size() < 2) {
-//                    Toast.makeText(CreateGroup.this, "Group size must not be less than 3", Toast.LENGTH_LONG).show();
-//                }
+                else if (list_users.size() < 2) {
+                    Toast.makeText(CreateGroup.this, "Group size must not be less than 3", Toast.LENGTH_LONG).show();
+                }
                 else {
+                    ArrayList<String> uids = new ArrayList<>();
+                    for (User u : list_users) {
+                        uids.add(u.getUid());
+                    }
+                    firestoreHelper.create_group(uids,groupName);
+
                     Intent intent = new Intent(CreateGroup.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
@@ -67,6 +79,26 @@ public class CreateGroup extends AppCompatActivity {
                 }
             }
         });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        ArrayList<User> list_to = getIntent().getExtras().getParcelableArrayList("user_list");
+
+        for (User u : list_to) {
+            if (list_users.contains(u)) {
+            }
+            else {
+                list_users.add(u);
+            }
+        }
+
+        if (!list_to.isEmpty()) {
+            adapter.notifyDataSetChanged();
+        }
 
     }
 }
