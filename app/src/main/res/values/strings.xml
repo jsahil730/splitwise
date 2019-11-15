@@ -15,4 +15,7 @@
     <string name="borrowersCollection">Borrowers</string>
     <string name="groupTransactionCollection">Group Transactions</string>
     <string name="nonGroupTransactionCollection">Non Group Transactions</string>
+    <string name="TransactionItems">Transaction Items</string>
+    <string name="AllExchanges">All exchanges</string>
+    <string name="userSpecificExchanges">Amounts owed</string>
 </resources>

@@ -6,6 +6,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.splitwise.transaction.TransacDoc;
+import com.example.splitwise.transaction.TransactionRecord;
+import com.example.splitwise.transaction.UserTransact;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,7 +17,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Transaction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FirestoreHelper {
@@ -133,6 +138,7 @@ public class FirestoreHelper {
 
     public void create_group(final List<String> members, final String group_name){
 
+        members.add(userId);
         for(String member1: members){
             for(String member2: members){
                 add_one_direction(member1,member2);
@@ -180,6 +186,40 @@ public class FirestoreHelper {
 
     }
 
+    public void processTransaction(TransactionRecord record){
 
+        TransacDoc transacDoc = new TransacDoc(record.getGroupID(),record.getDescription(),record.getTotalAmount(),record.getTag(),record.getDate());
+        List<UserTransact> userTransacts = record.getExchanges();
+
+        List<CollectionReference> collectionReferenceList= new ArrayList<>();
+        CollectionReference collectionReference;
+
+        if(record.getGroupID()==null){
+            for(UserTransact userTransact : userTransacts)
+            {
+                String userId= userTransact.getUserID();
+                collectionReferenceList.add(userColRef.document(userId)
+                        .collection(res.getString(R.string.nonGroupTransactionCollection))
+                        .document(record.getTag())
+                        .collection(res.getString(R.string.TransactionItems))
+                        .add(transacDoc)
+                        .getResult()
+                        .collection(res.getString(R.string.AllExchanges)));
+
+            }
+        }
+        else
+        {
+            collectionReference= groupsRef.document(record.getGroupID())
+                    .collection(res.getString(R.string.groupTransactionCollection))
+                    .document(record.getTag())
+                    .collection(res.getString(R.string.TransactionItems))
+                    .add(transacDoc)
+                    .getResult()
+                    .collection(res.getString(R.string.AllExchanges));
+        }
+
+
+    }
 
 }

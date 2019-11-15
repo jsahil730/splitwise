@@ -3,7 +3,7 @@ package com.example.splitwise.transaction;
 import java.util.Date;
 import java.util.List;
 
-public class Transaction {
+public class TransactionRecord {
 
     private String groupID;
     private List<UserTransact> exchanges;
@@ -12,12 +12,12 @@ public class Transaction {
     private String tag;
     private Date date;
 
-    public Transaction(){
+    public TransactionRecord(){
 
     }
 
 
-    public Transaction(String groupID, List<UserTransact> exchanges, String description, double totalAmount, String tag, Date date) {
+    public TransactionRecord(String groupID, List<UserTransact> exchanges, String description, double totalAmount, String tag, Date date) {
         this.groupID = groupID;
         this.exchanges = exchanges;
         this.description = description;

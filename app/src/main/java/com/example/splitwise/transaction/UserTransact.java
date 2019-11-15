@@ -3,15 +3,18 @@ package com.example.splitwise.transaction;
 public class UserTransact {
 
     private String userID;
+    private String name;
     private double amount_paid;
     private double stake;
+
 
     public UserTransact(){
 
     }
 
-    public UserTransact(String userID, double amount_paid, double stake) {
+    public UserTransact(String userID, String name,double amount_paid, double stake) {
         this.userID = userID;
+        this.name=name;
         this.amount_paid = amount_paid;
         this.stake = stake;
     }
@@ -22,6 +25,14 @@ public class UserTransact {
 
     public void setUserID(String userID) {
         this.userID = userID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getAmount_paid() {
