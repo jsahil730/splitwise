@@ -1,4 +1,4 @@
-package com.example.splitwise.ui.add_friend;
+package com.example.splitwise.ui.add;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +20,6 @@ public class AddFriend extends AppCompatActivity {
 
     EditText friend_id;
     Button finish_button;
-    ProgressBar progressBar;
     Toolbar toolbar;
 
     @Override
@@ -30,7 +29,6 @@ public class AddFriend extends AppCompatActivity {
 
         friend_id = findViewById(R.id.add_friend);
         finish_button = findViewById(R.id.save_friend);
-        progressBar = findViewById(R.id.progressBar);
         toolbar= findViewById(R.id.toolbar);
         final FirestoreHelper firestoreHelper=new FirestoreHelper(this);
 
@@ -39,18 +37,15 @@ public class AddFriend extends AppCompatActivity {
         finish_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
                 String friend_user_id = friend_id.getText().toString();
 
                 if (friend_user_id.isEmpty()) {
                     Toast.makeText(AddFriend.this,"Friend ID must not be empty!",Toast.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.GONE);
                 }
                 else {
 
                     firestoreHelper.addFriend(friend_user_id);
 
-                    progressBar.setVisibility(View.GONE);
                     Intent intent = new Intent(AddFriend.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
 

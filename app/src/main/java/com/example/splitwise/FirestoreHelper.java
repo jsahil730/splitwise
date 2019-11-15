@@ -20,6 +20,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.List;
+
 public class FirestoreHelper {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -223,5 +225,4 @@ public class FirestoreHelper {
         return ret;
 
     }
-
 }

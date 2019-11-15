@@ -10,12 +10,17 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/settings"
-        android:title="Settings"
+        android:id="@+id/add_friend"
+        android:title="@string/add_friend"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/add_friend"
-        android:title="Add Friend"
+        android:id="@+id/create_group"
+        android:title="@string/add_group"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/settings"
+        android:title="@string/settings"
         app:showAsAction="never" />
 </menu>

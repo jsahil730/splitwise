@@ -11,7 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.splitwise.ui.add_friend.AddFriend;
+import com.example.splitwise.ui.add.AddFriend;
+import com.example.splitwise.ui.add.CreateGroup;
 import com.example.splitwise.ui.main.SectionsPagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -71,25 +72,25 @@ public class MainActivity extends AppCompatActivity {
             case R.id.sign_out:
                 firebaseAuth.signOut();
 
-                Intent intent=new Intent(getApplicationContext(),SignupPage.class);
+                Intent intent1=new Intent(getApplicationContext(),SignupPage.class);
 
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent1);
 
                 return true;
             case R.id.settings:
                 return true;
             case R.id.add_friend:
-                add_friend_func();
+                Intent intent3 = new Intent(this, AddFriend.class);
+                startActivity(intent3);
+                return true;
+            case R.id.create_group:
+                Intent intent4 = new Intent(this, CreateGroup.class);
+                startActivity(intent4);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void add_friend_func() {
-        Intent intent = new Intent(this, AddFriend.class);
-
-        startActivity(intent);
-    }
 }

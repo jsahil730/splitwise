@@ -12,7 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
+public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int Header = 1;
+    private static final int Normal = 2;
+    private static final int Footer = 3;
 
     private boolean activity_tab = false;
     private int size = 0;
@@ -23,53 +27,135 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         this.activity_tab = activity_tab;
         this.context = context;
         this.list_items = list_items;
+        size = list_items.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (!activity_tab) {
+            if (position == 0) {
+                return Header;
+            }
+            else if (position == size+1) {
+                return Footer;
+            }
+            else {
+                return Normal;
+            }
+        }
+        else {
+            if (position == size) {
+                return Footer;
+            }
+            else {
+                return Normal;
+            }
+        }
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v;
         if (activity_tab) {
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_activity_card,parent,false);
+            if (viewType == Normal) {
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_activity_card,parent,false);
+                return new ActivityViewHolder(v);
+            }
+            else {
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_footer,parent,false);
+                return new FooterViewHolder(v);
+            }
         }
         else {
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_expense_card,parent,false);
+            if (viewType == Header) {
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_expense_header,parent,false);
+                return new HeaderViewHolder(v);
+            }
+            else if (viewType == Normal) {
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_expense_card, parent, false);
+                return new ExpenseViewHolder(v);
+            }
+            else {
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_footer,parent,false);
+                return new FooterViewHolder(v);
+            }
         }
-        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Pair<String,String> pair = list_items.get(position);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
         if (activity_tab) {
-            holder.activity_done.setText(pair.first);
+            switch (getItemViewType(position)) {
+                case Normal:
+                    ((ActivityViewHolder) holder).activity_done.setText(list_items.get(position).first);
+                    break;
+                case Footer:
+                    break;
+            }
         }
         else {
-            holder.name.setText(pair.first);
-            holder.amount.setText(pair.second);
+            switch (getItemViewType(position)) {
+                case Header:
+//                    ((HeaderViewHolder) holder).total_balance.setText();
+                    break;
+                case Normal:
+                    Pair<String,String> pair = list_items.get(position-1);
+                    ((ExpenseViewHolder) holder).name.setText(pair.first);
+                    ((ExpenseViewHolder) holder).amount.setText(pair.second);
+                    break;
+                case Footer:
+                    break;
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        return list_items.size();
+        if (activity_tab) {
+            return (size+1);
+        }
+        else {
+            return (size+2);
+        }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView name;
-        public TextView amount;
-        public TextView activity_done;
+    public class ActivityViewHolder extends RecyclerView.ViewHolder {
+        TextView activity_done;
 
-        public ViewHolder(@NonNull View itemView) {
+        ActivityViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            if (activity_tab) {
-                activity_done = itemView.findViewById(R.id.activity_done);
-            }
-            else {
-                name = itemView.findViewById(R.id.name);
-                amount = itemView.findViewById(R.id.amount);
-            }
+            activity_done = itemView.findViewById(R.id.activity_done);
+        }
+    }
+
+    public class ExpenseViewHolder extends RecyclerView.ViewHolder {
+        TextView name;
+        TextView amount;
+
+        ExpenseViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            name = itemView.findViewById(R.id.name);
+            amount = itemView.findViewById(R.id.amount);
+        }
+    }
+
+    public class HeaderViewHolder extends RecyclerView.ViewHolder {
+        TextView total_balance;
+
+        public HeaderViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            total_balance = itemView.findViewById(R.id.total_balance);
+        }
+    }
+
+    public class FooterViewHolder extends RecyclerView.ViewHolder {
+        FooterViewHolder(@NonNull View itemView) {
+            super(itemView);
         }
     }
 
