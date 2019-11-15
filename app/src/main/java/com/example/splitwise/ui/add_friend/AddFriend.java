@@ -54,7 +54,7 @@ public class AddFriend extends AppCompatActivity {
                     Intent intent = new Intent(AddFriend.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-                    Toast.makeText(AddFriend.this,"Friend added successfully!",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(AddFriend.this,"Friend added successfully!",Toast.LENGTH_SHORT).show();
                     startActivity(intent);
                     finish();
                 }

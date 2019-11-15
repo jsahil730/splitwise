@@ -53,12 +53,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        List<String> users = new ArrayList<>();
-        users.add("anubhav@splitwise.clone");
-        users.add("atulya@splitwise.clone");
-        users.add("sahil@splitwise.clone");
 
-        firestoreHelper.create_group(users,"group1");
 
 
     }
