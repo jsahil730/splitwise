@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent4 = new Intent(MainActivity.this, CreateGroup.class);
 
                         Bundle bundle = new Bundle();
-                        ArrayList<User> userref = new ArrayList<User>();
+                        ArrayList<User> userref = new ArrayList<>();
                         userref.add(new User(uid,uname));
                         bundle.putParcelableArrayList("user_list",userref);
                         intent4.putExtras(bundle);

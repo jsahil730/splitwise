@@ -32,7 +32,7 @@ public class AddFriend extends AppCompatActivity {
         toolbar= findViewById(R.id.toolbar);
         final FirestoreHelper firestoreHelper=new FirestoreHelper(this);
 
-        toolbar.setTitle("  Add Friend");
+        toolbar.setTitle("Add Friend");
 
         finish_button.setOnClickListener(new View.OnClickListener() {
             @Override

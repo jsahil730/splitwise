@@ -1,5 +1,6 @@
 package com.example.splitwise.ui.add;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -42,21 +43,19 @@ public class CreateGroup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
 
+        finish_button = findViewById(R.id.save_group);
+        toolbar = findViewById(R.id.toolbar);
+
+        toolbar.setTitle("Create Group");
+
+        group_name = findViewById(R.id.group_name_edit);
+        add_people = findViewById(R.id.add_people_group);
+
         list_users = new ArrayList<User>();
         adapter = new FriendRVAdapter(list_users,this,false);
         recyclerView = findViewById(R.id.users_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-        finish_button = findViewById(R.id.save_group);
-        toolbar = findViewById(R.id.toolbar);
-
-        toolbar.setTitle("  Create Group");
-
-//        if (v != null) {
-//            Log.d("t","not null");
-//        }
-        group_name = findViewById(R.id.group_name_edit);
-        add_people = findViewById(R.id.add_people_group);
 
         final FirestoreHelper firestoreHelper = new FirestoreHelper(this);
 
@@ -98,8 +97,8 @@ public class CreateGroup extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
 
         ArrayList<User> list_to = getIntent().getExtras().getParcelableArrayList("user_list");
 
@@ -110,10 +109,8 @@ public class CreateGroup extends AppCompatActivity {
                 list_users.add(u);
             }
         }
-
         if (!list_to.isEmpty()) {
             adapter.notifyDataSetChanged();
         }
-
     }
 }
