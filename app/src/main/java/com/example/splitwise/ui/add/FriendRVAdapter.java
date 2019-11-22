@@ -30,6 +30,12 @@ public class FriendRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private ArrayList<User> list_users;
     private int size;
     private SparseBooleanArray selected_users;
+//    private EditText editText;
+//
+//    @NonNull
+//    public EditText getEditText() {
+//        return editText;
+//    }
 
     public FriendRVAdapter(ArrayList<User> list_users, Context context, boolean clickable) {
         this.clickable = clickable;
@@ -59,10 +65,10 @@ public class FriendRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        if (!clickable) {
-            if (position == 0) return GROUP_NAME;
-            else if (position == 1) return ADD_PEOPLE;
-        }
+//        if (!clickable) {
+//            if (position == 0) return GROUP_NAME;
+//            else if (position == 1) return ADD_PEOPLE;
+//        }
         return NORMAL;
     }
 
@@ -75,19 +81,19 @@ public class FriendRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return new FriendViewHolder(v);
         }
         else {
-            switch(viewType) {
-                case GROUP_NAME:
-                    v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_group_name,parent,false);
-                    return new GroupNameViewHolder(v);
-
-                case ADD_PEOPLE:
-                    v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_add_users_group,parent,false);
-                    return new AddPeopleViewHolder(v);
-
-                default:
+//            switch(viewType) {
+//                case GROUP_NAME:
+//                    v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_group_name,parent,false);
+//                    return new GroupNameViewHolder(v);
+//
+//                case ADD_PEOPLE:
+//                    v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_add_users_group,parent,false);
+//                    return new AddPeopleViewHolder(v);
+//
+//                default:
                     v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_friend_card,parent,false);
                     return new FriendViewHolder(v);
-            }
+//            }
         }
     }
 
@@ -139,53 +145,49 @@ public class FriendRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
     }
-
-    public class GroupNameViewHolder extends RecyclerView.ViewHolder {
-        @NonNull
-        public EditText getEditText() {
-            return editText;
-        }
-
-        EditText editText;
-        CircleImageView circleImageView;
-        TextView textView;
-
-        public GroupNameViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            editText = itemView.findViewById(R.id.group_name_edit);
-            circleImageView = itemView.findViewById(R.id.image_group);
-            textView = itemView.findViewById(R.id.group);
-        }
-
-        //Upload Group photo implement onclick here and set listener
-    }
-
-    public class AddPeopleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView textView;
-
-        public AddPeopleViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            textView = itemView.findViewById(R.id.add_people_group);
-            textView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(context,GetGroupUsers.class);
-            context.startActivity(intent);
-        }
-    }
+//
+//    public class GroupNameViewHolder extends RecyclerView.ViewHolder {
+//        EditText editText;
+//        CircleImageView circleImageView;
+//        TextView textView;
+//
+//        public GroupNameViewHolder(@NonNull View itemView) {
+//            super(itemView);
+//
+//            editText = itemView.findViewById(R.id.group_name_edit);
+//            circleImageView = itemView.findViewById(R.id.image_group);
+//            textView = itemView.findViewById(R.id.group);
+//            FriendRVAdapter.this.editText = editText;
+//        }
+//
+//        //Upload Group photo implement onclick here and set listener
+//    }
+//
+//    public class AddPeopleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+//        TextView textView;
+//
+//        public AddPeopleViewHolder(@NonNull View itemView) {
+//            super(itemView);
+//
+//            textView = itemView.findViewById(R.id.add_people_group);
+//            textView.setOnClickListener(this);
+//        }
+//
+//        @Override
+//        public void onClick(View v) {
+//            Intent intent = new Intent(context,GetGroupUsers.class);
+//            context.startActivity(intent);
+//        }
+//    }
 
     @Override
     public int getItemCount() {
 
-        if(clickable) {
+//        if(clickable) {
             return size;
-        }
-        else {
-            return (size+2);
-        }
+//        }
+//        else {
+//            return (size+2);
+//        }
     }
 }

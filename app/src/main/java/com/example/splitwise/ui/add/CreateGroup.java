@@ -13,6 +13,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.splitwise.FirestoreHelper;
@@ -32,8 +33,9 @@ public class CreateGroup extends AppCompatActivity {
     Button finish_button;
     Toolbar toolbar;
     RecyclerView recyclerView;
-    RecyclerView.Adapter adapter;
+    FriendRVAdapter adapter;
     ArrayList<User> list_users;
+    TextView add_people;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,11 @@ public class CreateGroup extends AppCompatActivity {
 
         toolbar.setTitle("  Create Group");
 
+//        if (v != null) {
+//            Log.d("t","not null");
+//        }
+        group_name = findViewById(R.id.group_name_edit);
+        add_people = findViewById(R.id.add_people_group);
 
         final FirestoreHelper firestoreHelper = new FirestoreHelper(this);
 
@@ -78,6 +85,14 @@ public class CreateGroup extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
+            }
+        });
+
+        add_people.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CreateGroup.this,GetGroupUsers.class);
+                startActivity(intent);
             }
         });
     }
