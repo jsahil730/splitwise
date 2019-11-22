@@ -23,7 +23,6 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int Footer = 3;
 
     private boolean activity_tab = false;
-    private int size = 0;
     private Context context;
     private List<AmountTypeDoc> list_items;
 
@@ -31,7 +30,6 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.activity_tab = activity_tab;
         this.context = context;
         this.list_items = list_items;
-        size = list_items.size();
     }
 
     @Override
@@ -40,7 +38,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (position == 0) {
                 return Header;
             }
-            else if (position == size+1) {
+            else if (position == list_items.size()+1) {
                 return Footer;
             }
             else {
@@ -48,7 +46,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         }
         else {
-            if (position == size) {
+            if (position == list_items.size()) {
                 return Footer;
             }
             else {
@@ -118,10 +116,10 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemCount() {
         if (activity_tab) {
-            return (size+1);
+            return (list_items.size()+1);
         }
         else {
-            return (size+2);
+            return (list_items.size()+2);
         }
     }
 

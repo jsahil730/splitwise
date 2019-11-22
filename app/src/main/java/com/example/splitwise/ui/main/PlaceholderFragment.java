@@ -20,6 +20,7 @@ import com.example.splitwise.IdTypeDoc;
 import com.example.splitwise.MainActivity;
 import com.example.splitwise.R;
 import com.example.splitwise.ui.add.User;
+import com.google.api.SystemParameterOrBuilder;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -42,7 +43,7 @@ public class PlaceholderFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private List<AmountTypeDoc> list_items;
     private int index;
-    private FirestoreHelper firestoreHelper;
+    FirestoreHelper firestoreHelper;
 
 //    public static PlaceholderFragment newInstance(int index) {
 //        PlaceholderFragment fragment = new PlaceholderFragment();
@@ -59,9 +60,12 @@ public class PlaceholderFragment extends Fragment {
 
     @Override
     public View onCreateView(
+
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
+
+        firestoreHelper= new FirestoreHelper(getActivity());
 
         recyclerView = root.findViewById(R.id.friends_or_groups);
         recyclerView.setHasFixedSize(true);
@@ -88,29 +92,28 @@ public class PlaceholderFragment extends Fragment {
         }
         else if(index==2){
 
-            collectionReference = firestoreHelper.getUserRef().collection(res.getString(R.string.GroupUsers));
+            collectionReference = firestoreHelper.getUserRef().collection(res.getString(R.string.user_groups));
         }
-
-        collectionReference.addSnapshotListener(getActivity(),new EventListener<QuerySnapshot>() {
+        if(collectionReference!=null) {
+            collectionReference.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                    if(e!=null)
-                    {
+                    if (e != null) {
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
+                    } else {
                         list_items.clear();
-                        for(DocumentSnapshot documentSnapshot: queryDocumentSnapshots)
-                        {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             AmountTypeDoc temp = documentSnapshot.toObject(AmountTypeDoc.class);
                             list_items.add(temp);
                         }
+
+                        System.out.println(list_items);
                         adapter.notifyDataSetChanged();
                     }
                 }
             });
+        }
         }
 
     }
