@@ -2,11 +2,13 @@ package com.example.splitwise.ui.add;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +18,9 @@ import android.widget.Toast;
 import com.example.splitwise.FirestoreHelper;
 import com.example.splitwise.MainActivity;
 import com.example.splitwise.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,32 +40,28 @@ public class CreateGroup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
 
-        group_name = findViewById(R.id.group_name);
+        list_users = new ArrayList<User>();
+        adapter = new FriendRVAdapter(list_users,this,false);
+        recyclerView = findViewById(R.id.users_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
         finish_button = findViewById(R.id.save_group);
         toolbar = findViewById(R.id.toolbar);
 
         toolbar.setTitle("  Create Group");
 
-        recyclerView = findViewById(R.id.users_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        list_users = new ArrayList<User>();
 
         final FirestoreHelper firestoreHelper = new FirestoreHelper(this);
-        list_users.add(firestoreHelper.getMyData());
-
-        adapter = new FriendRVAdapter(list_users,this);
-        recyclerView.setAdapter(adapter);
 
         finish_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String groupName = group_name.getText().toString();
+                final String groupName = group_name.getText().toString();
 
                 if (groupName.isEmpty()) {
                     Toast.makeText(CreateGroup.this,"Group name must not be empty!",Toast.LENGTH_LONG).show();
                 }
-                else if (list_users.size() < 2) {
+                else if (list_users.size() < 3) {
                     Toast.makeText(CreateGroup.this, "Group size must not be less than 3", Toast.LENGTH_LONG).show();
                 }
                 else {
@@ -79,7 +80,6 @@ public class CreateGroup extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     @Override

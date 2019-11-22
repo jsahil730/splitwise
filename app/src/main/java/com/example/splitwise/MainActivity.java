@@ -2,11 +2,11 @@ package com.example.splitwise;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,14 +17,16 @@ import com.example.splitwise.ui.add.AddFriend;
 import com.example.splitwise.ui.add.CreateGroup;
 import com.example.splitwise.ui.add.User;
 import com.example.splitwise.ui.main.SectionsPagerAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,13 +86,31 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent3);
                 return true;
             case R.id.create_group:
-                Intent intent4 = new Intent(this, CreateGroup.class);
+                FirestoreHelper firestoreHelper = new FirestoreHelper(this);
+                final String uid = firestoreHelper.getUserId();
+                firestoreHelper.getUserRef().get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String uname = documentSnapshot.toObject(IdTypeDoc.class).getName();
 
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("user_list",new ArrayList<User>());
-                intent4.putExtras(bundle);
+                        Intent intent4 = new Intent(MainActivity.this, CreateGroup.class);
 
-                startActivity(intent4);
+                        Bundle bundle = new Bundle();
+                        ArrayList<User> userref = new ArrayList<User>();
+                        userref.add(new User(uid,uname));
+                        bundle.putParcelableArrayList("user_list",userref);
+                        intent4.putExtras(bundle);
+
+                        startActivity(intent4);
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                })
+                ;
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

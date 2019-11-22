@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.splitwise.FirestoreHelper;
 import com.example.splitwise.R;
 
 import java.util.ArrayList;
@@ -33,20 +31,13 @@ public class FriendRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private int size;
     private SparseBooleanArray selected_users;
 
-    public FriendRVAdapter(Context context) {
-        this.clickable = true;
-        this.context = context;
-        FirestoreHelper firestoreHelper = new FirestoreHelper(context);
-        list_users = firestoreHelper.getFriendList();
-        size = list_users.size();
-        selected_users = new SparseBooleanArray();
-    }
-
-    public FriendRVAdapter(ArrayList<User> list_users, Context context) {
-        this.clickable = false;
+    public FriendRVAdapter(ArrayList<User> list_users, Context context, boolean clickable) {
+        this.clickable = clickable;
         this.context = context;
         this.list_users = list_users;
         size = list_users.size();
+
+        selected_users = new SparseBooleanArray();
     }
 
     public ArrayList<User> list_selected_users() {
@@ -150,6 +141,11 @@ public class FriendRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public class GroupNameViewHolder extends RecyclerView.ViewHolder {
+        @NonNull
+        public EditText getEditText() {
+            return editText;
+        }
+
         EditText editText;
         CircleImageView circleImageView;
         TextView textView;
@@ -157,7 +153,7 @@ public class FriendRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public GroupNameViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            editText = itemView.findViewById(R.id.group_name);
+            editText = itemView.findViewById(R.id.group_name_edit);
             circleImageView = itemView.findViewById(R.id.image_group);
             textView = itemView.findViewById(R.id.group);
         }

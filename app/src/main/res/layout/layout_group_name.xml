@@ -9,6 +9,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/card_group"
         app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
@@ -42,8 +43,9 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/group_name"
-                    android:hint="@string/enter_group_name" />
+                    android:id="@+id/group_name_edit"
+                    android:hint="@string/enter_group_name"
+                    android:inputType="text"/>
 
             </LinearLayout>
 

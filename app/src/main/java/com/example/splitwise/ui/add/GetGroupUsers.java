@@ -41,7 +41,7 @@ public class GetGroupUsers extends AppCompatActivity {
         recyclerView = findViewById(R.id.friends_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new FriendRVAdapter(this);
+        adapter = new FriendRVAdapter(list_users,this,true);
         recyclerView.setAdapter(adapter);
 
         finish_selection.setOnClickListener(new View.OnClickListener() {

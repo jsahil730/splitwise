@@ -28,7 +28,23 @@ public class FirestoreHelper {
     private FirebaseUser firebaseUser;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference userColRef;
+
+    public DocumentReference getUserRef() {
+        return userRef;
+    }
+
     private DocumentReference userRef;
+
+    @NonNull
+    public CollectionReference getUserColRef() {
+        return userColRef;
+    }
+
+    @NonNull
+    public CollectionReference getFriendsColRef() {
+        return friendsColRef;
+    }
+
     private CollectionReference friendsColRef;
     private String userId;
     private Resources res;
@@ -39,6 +55,11 @@ public class FirestoreHelper {
 
 
     public FirestoreHelper() {
+    }
+
+    @NonNull
+    public String getUserId() {
+        return userId;
     }
 
     public FirestoreHelper(Context context) {
@@ -197,27 +218,5 @@ public class FirestoreHelper {
                     }
                 });
 
-    }
-
-    public ArrayList<User> getFriendList()
-    {
-        ArrayList<User> ret= new ArrayList<>();
-        QuerySnapshot queryDocumentSnapshots= friendsColRef.orderBy("name").get()
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .getResult();
-
-        for(DocumentSnapshot documentSnapshot: queryDocumentSnapshots) {
-            ret.add(new User(documentSnapshot.getId(),documentSnapshot.toObject(IdTypeDoc.class).getName()));
-        }
-        return ret;
-    }
-
-    public User getMyData() {
-        return new User(userId,userRef.get().getResult().toObject(IdTypeDoc.class).getName());
     }
 }
