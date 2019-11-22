@@ -10,7 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.splitwise.AmountTypeDoc;
 import com.example.splitwise.R;
+import com.example.splitwise.ui.add.User;
 
 import java.util.List;
 
@@ -23,9 +25,9 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private boolean activity_tab = false;
     private int size = 0;
     private Context context;
-    private List<Pair<String,String>> list_items;
+    private List<AmountTypeDoc> list_items;
 
-    public RVAdapter(boolean activity_tab, Context context, List<Pair<String,String>> list_items) {
+    public RVAdapter(boolean activity_tab, Context context, List<AmountTypeDoc> list_items) {
         this.activity_tab = activity_tab;
         this.context = context;
         this.list_items = list_items;
@@ -91,7 +93,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (activity_tab) {
             switch (getItemViewType(position)) {
                 case Normal:
-                    ((ActivityViewHolder) holder).activity_done.setText(list_items.get(position).first);
+                    ((ActivityViewHolder) holder).activity_done.setText(list_items.get(position).getName());
                     break;
                 case Footer:
                     break;
@@ -103,9 +105,9 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //                    ((HeaderViewHolder) holder).total_balance.setText();
                     break;
                 case Normal:
-                    Pair<String,String> pair = list_items.get(position-1);
-                    ((ExpenseViewHolder) holder).name.setText(pair.first);
-                    ((ExpenseViewHolder) holder).amount.setText(pair.second);
+                    AmountTypeDoc pair = list_items.get(position-1);
+                    ((ExpenseViewHolder) holder).name.setText(pair.getName());
+                    ((ExpenseViewHolder) holder).amount.setText(""+pair.getAmount());
                     break;
                 case Footer:
                     break;

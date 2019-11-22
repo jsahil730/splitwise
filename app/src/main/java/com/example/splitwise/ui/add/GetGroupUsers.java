@@ -43,7 +43,7 @@ public class GetGroupUsers extends AppCompatActivity {
 
         finish_selection = findViewById(R.id.finish_user_selection);
 
-        list_users = new ArrayList<User>();
+        list_users = getIntent().getExtras().getParcelableArrayList("friends_list");
 
         recyclerView = findViewById(R.id.friends_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
