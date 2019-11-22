@@ -1,5 +1,6 @@
 package com.example.splitwise.ui.add;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -17,9 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.splitwise.FirestoreHelper;
+import com.example.splitwise.IdTypeDoc;
 import com.example.splitwise.MainActivity;
 import com.example.splitwise.R;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -36,8 +40,10 @@ public class CreateGroup extends AppCompatActivity {
     FriendRVAdapter adapter;
     ArrayList<User> list_users;
     TextView add_people;
+    FirestoreHelper firestoreHelper ;
 
-    @Override
+
+     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
@@ -49,6 +55,7 @@ public class CreateGroup extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         finish_button = findViewById(R.id.save_group);
         toolbar = findViewById(R.id.toolbar);
+        firestoreHelper = new FirestoreHelper(this);
 
         toolbar.setTitle("  Create Group");
 
@@ -58,7 +65,6 @@ public class CreateGroup extends AppCompatActivity {
         group_name = findViewById(R.id.group_name_edit);
         add_people = findViewById(R.id.add_people_group);
 
-        final FirestoreHelper firestoreHelper = new FirestoreHelper(this);
 
         finish_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,8 +97,34 @@ public class CreateGroup extends AppCompatActivity {
         add_people.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CreateGroup.this,GetGroupUsers.class);
-                startActivity(intent);
+                //send friend list using bundle
+
+                CollectionReference friendsColRef = firestoreHelper.getFriendsColRef();
+                friendsColRef.get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                ArrayList<User> friends = new ArrayList<>();
+                                for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots)
+                                {
+                                    User temp = new User(documentSnapshot.getId(),documentSnapshot.toObject(IdTypeDoc.class).getName());
+                                    friends.add(temp);
+                                }
+                                Intent intent = new Intent(CreateGroup.this,GetGroupUsers.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelableArrayList("friends_list",friends);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(CreateGroup.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
             }
         });
     }
@@ -111,9 +143,9 @@ public class CreateGroup extends AppCompatActivity {
             }
         }
 
-        if (!list_to.isEmpty()) {
+//        if (!list_to.isEmpty()) {
             adapter.notifyDataSetChanged();
-        }
+//        }
 
     }
 }
