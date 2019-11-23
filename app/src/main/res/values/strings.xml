@@ -22,4 +22,7 @@
     <string name="write_friend">Enter user ID here</string>
     <string name="save_button">Save</string>
     <string name="finish_button">Finish</string>
+    <string name="key_name_group">group_name</string>
+    <string name="key_friends">friends_list</string>
+    <string name="key_users_selection">selected_users</string>
 </resources>

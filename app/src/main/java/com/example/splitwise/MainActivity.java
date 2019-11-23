@@ -1,6 +1,7 @@
 package com.example.splitwise;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
@@ -27,6 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -89,16 +92,17 @@ public class MainActivity extends AppCompatActivity {
                 FirestoreHelper firestoreHelper = new FirestoreHelper(this);
                 final String uid = firestoreHelper.getUserId();
                 firestoreHelper.getUserRef().get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        String uname = documentSnapshot.toObject(IdTypeDoc.class).getName();
+                        String uname = Objects.requireNonNull(documentSnapshot.toObject(IdTypeDoc.class)).getName();
 
                         Intent intent4 = new Intent(MainActivity.this, CreateGroup.class);
 
                         Bundle bundle = new Bundle();
                         ArrayList<User> userref = new ArrayList<>();
                         userref.add(new User(uid,uname));
-                        bundle.putParcelableArrayList("user_list",userref);
+                        bundle.putParcelableArrayList(getString(R.string.key_users_selection),userref);
                         intent4.putExtras(bundle);
 
                         startActivity(intent4);

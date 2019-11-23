@@ -19,24 +19,20 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FriendRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
-    private static final int GROUP_NAME = 0;
-    private static final int ADD_PEOPLE = 1;
-    private static final int NORMAL = 2;
+    private static final int NORMAL = 0;
 
     private boolean clickable;
-    private Context context;
     private ArrayList<User> list_users;
     private SparseBooleanArray selected_users;
 
-    public FriendRVAdapter(ArrayList<User> list_users, Context context, boolean clickable) {
+    FriendRVAdapter(ArrayList<User> list_users, Context context, boolean clickable) {
         this.clickable = clickable;
-        this.context = context;
         this.list_users = list_users;
 
         selected_users = new SparseBooleanArray();
     }
 
-    public ArrayList<User> list_selected_users() {
+    ArrayList<User> list_selected_users() {
         ArrayList<User> list = new ArrayList<>();
 
         if (clickable) {
@@ -49,7 +45,7 @@ public class FriendRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return list;
     }
 
-    public boolean isSelected(int position) {
+    private boolean isSelected(int position) {
         return (selected_users.get(position,false));
     }
 
@@ -67,30 +63,26 @@ public class FriendRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
-        switch (getItemViewType(position)){
-            case NORMAL:
-                if (clickable) {
-                    final FriendViewHolder Holder = (FriendViewHolder) holder;
-                    Holder.textView.setText(list_users.get(position).getUname());
-                    Holder.itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (Holder.imageView.getVisibility() == View.VISIBLE) {
-                                Holder.itemView.setVisibility(View.GONE);
-                                selected_users.delete(position);
-                            }
-                            else if (Holder.imageView.getVisibility() == View.GONE) {
-                                Holder.imageView.setVisibility(View.VISIBLE);
-                                selected_users.put(position,true);
-                            }
-                            notifyDataSetChanged();
-                        }
-                    });
+        if (clickable) {
+            final FriendViewHolder Holder = (FriendViewHolder) holder;
+            Holder.textView.setText(list_users.get(position).getUname());
+            Holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Holder.imageView.getVisibility() == View.VISIBLE) {
+                        Holder.imageView.setVisibility(View.GONE);
+                        selected_users.delete(position);
+                    }
+                    else if (Holder.imageView.getVisibility() == View.GONE) {
+                        Holder.imageView.setVisibility(View.VISIBLE);
+                        selected_users.put(position,true);
+                    }
+                    notifyDataSetChanged();
                 }
-                else {
-                    ((FriendViewHolder) holder).textView.setText(list_users.get(position).getUname());
-                }
-                break;
+            });
+        }
+        else {
+            ((FriendViewHolder) holder).textView.setText(list_users.get(position).getUname());
         }
     }
 

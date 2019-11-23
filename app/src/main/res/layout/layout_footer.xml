@@ -14,9 +14,12 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="100dp"
             android:padding="15dp"
             >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
