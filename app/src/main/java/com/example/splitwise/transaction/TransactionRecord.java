@@ -5,7 +5,7 @@ import java.util.List;
 
 public class TransactionRecord {
 
-    private String groupID;
+    private String groupID=null;
     private List<UserTransact> exchanges;
     private String description;
     private double totalAmount;
@@ -14,6 +14,15 @@ public class TransactionRecord {
 
     public TransactionRecord(){
 
+    }
+
+    public TransactionRecord(List<UserTransact> exchanges, String description, double totalAmount, String tag, Date date) {
+
+        this.exchanges = exchanges;
+        this.description = description;
+        this.totalAmount = totalAmount;
+        this.tag = tag;
+        this.date = date;
     }
 
 
