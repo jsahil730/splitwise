@@ -12,7 +12,6 @@ import com.example.splitwise.transaction.IdAmountDocPair;
 import com.example.splitwise.transaction.TransacDoc;
 import com.example.splitwise.transaction.TransactionRecord;
 import com.example.splitwise.transaction.UserTransact;
-import com.example.splitwise.ui.add.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,14 +20,11 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 public class FirestoreHelper {
@@ -533,10 +529,7 @@ public class FirestoreHelper {
 
                             }
                         });
-
             }
-
-
         }
 
 
@@ -552,12 +545,7 @@ public class FirestoreHelper {
                 {
                     add_one_direction(personAid, personBid);
                 }
-
-
-
             }
         }
-
-
     }
 }

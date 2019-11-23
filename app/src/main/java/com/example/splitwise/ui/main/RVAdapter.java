@@ -1,5 +1,6 @@
 package com.example.splitwise.ui.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -113,6 +114,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private String getText(Double amount) {
         String s;
         amount *= 100;
@@ -122,10 +124,10 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             s = "settled up";
         }
         else if (amount > 0) {
-            s = "you owe \n" + amount;
+            s = String.format("you owe \n %.2f",amount);
         }
         else {
-            s = "owes you \n" + amount;
+            s = String.format("owes you \n %.2f",amount);
         }
         return s;
     }

@@ -8,16 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
-import com.example.splitwise.FirestoreHelper;
-import com.example.splitwise.IdTypeDoc;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import com.example.splitwise.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -26,7 +20,6 @@ public class GetGroupUsers extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
-    Button finish_selection;
     Toolbar toolbar;
     ArrayList<User> list_users;
 
@@ -38,8 +31,6 @@ public class GetGroupUsers extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Select Users");
 
-        finish_selection = findViewById(R.id.finish_user_selection);
-
         Bundle bundle = getIntent().getExtras();
         list_users = Objects.requireNonNull(bundle).getParcelableArrayList(getString(R.string.key_friends));
 
@@ -49,9 +40,19 @@ public class GetGroupUsers extends AppCompatActivity {
         adapter = new FriendRVAdapter(list_users,this,true);
         recyclerView.setAdapter(adapter);
 
-        finish_selection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_get_group_users,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.finish_user_selection:
                 list_users = ((FriendRVAdapter) adapter).list_selected_users();
 
                 Intent intent = new Intent(GetGroupUsers.this,CreateGroup.class);
@@ -61,7 +62,11 @@ public class GetGroupUsers extends AppCompatActivity {
                 intent.putExtras(bundle);
                 startActivity(intent);
                 finish();
-            }
-        });
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
+
+
 }

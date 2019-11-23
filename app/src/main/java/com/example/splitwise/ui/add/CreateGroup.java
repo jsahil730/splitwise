@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,7 +34,6 @@ import java.util.Objects;
 public class CreateGroup extends AppCompatActivity {
 
     EditText group_name;
-    Button finish_button;
     Toolbar toolbar;
     RecyclerView recyclerView;
     FriendRVAdapter adapter;
@@ -45,7 +47,6 @@ public class CreateGroup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
 
-        finish_button = findViewById(R.id.save_group);
         toolbar = findViewById(R.id.toolbar);
         firestoreHelper = new FirestoreHelper(this);
 
@@ -61,34 +62,6 @@ public class CreateGroup extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         final FirestoreHelper firestoreHelper = new FirestoreHelper(this);
-
-        finish_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String groupName = group_name.getText().toString();
-
-                if (groupName.isEmpty()) {
-                    Toast.makeText(CreateGroup.this,"Group name must not be empty!",Toast.LENGTH_LONG).show();
-                }
-                else if (list_users.size() < 3) {
-                    Toast.makeText(CreateGroup.this, "Group size must not be less than 3", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    ArrayList<String> uids = new ArrayList<>();
-                    for (User u : list_users) {
-                        uids.add(u.getUid());
-                    }
-                    firestoreHelper.create_group(uids,groupName);
-
-                    Intent intent = new Intent(CreateGroup.this, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                    Toast.makeText(CreateGroup.this, "Group created successfully!", Toast.LENGTH_SHORT).show();
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        });
 
         add_people.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +111,45 @@ public class CreateGroup extends AppCompatActivity {
 
         if (!list_to.isEmpty()) {
             adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_create_group,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.create_group:
+                String groupName = group_name.getText().toString();
+
+                if (groupName.isEmpty()) {
+                    Toast.makeText(CreateGroup.this,"Group name must not be empty!",Toast.LENGTH_LONG).show();
+                }
+                else if (list_users.size() < 3) {
+                    Toast.makeText(CreateGroup.this, "Group size must not be less than 3", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    ArrayList<String> uids = new ArrayList<>();
+                    for (User u : list_users) {
+                        uids.add(u.getUid());
+                    }
+                    firestoreHelper.create_group(uids,groupName);
+
+                    Intent intent = new Intent(CreateGroup.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                    Toast.makeText(CreateGroup.this, "Group created successfully!", Toast.LENGTH_SHORT).show();
+                    startActivity(intent);
+                    finish();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
