@@ -1,4 +1,4 @@
-package com.example.splitwise.ui.add;
+package com.example.splitwise.add_friend_or_group;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -59,8 +59,6 @@ public class CreateGroup extends AppCompatActivity {
         recyclerView = findViewById(R.id.users_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
-        final FirestoreHelper firestoreHelper = new FirestoreHelper(this);
 
         add_people.setOnClickListener(new View.OnClickListener() {
             @Override

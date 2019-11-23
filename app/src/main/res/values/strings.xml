@@ -29,4 +29,7 @@
     <string name="key_friends">friends_list</string>
     <string name="key_users_selection">selected_users</string>
     <string name="Next">next</string>
+    <string name="hint_desc">Enter Description here</string>
+    <string name="enter_amount">Enter Amount here</string>
+    <string name="users_transac">Add users to transaction</string>
 </resources>

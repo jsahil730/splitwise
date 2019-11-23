@@ -1,4 +1,4 @@
-package com.example.splitwise.ui.add;
+package com.example.splitwise.add_friend_or_group;
 
 import android.content.Context;
 import android.util.SparseBooleanArray;
@@ -17,22 +17,20 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FriendRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-
     private static final int NORMAL = 0;
 
     private boolean clickable;
     private ArrayList<User> list_users;
     private SparseBooleanArray selected_users;
 
-    FriendRVAdapter(ArrayList<User> list_users, Context context, boolean clickable) {
+    public FriendRVAdapter(ArrayList<User> list_users, Context context, boolean clickable) {
         this.clickable = clickable;
         this.list_users = list_users;
 
         selected_users = new SparseBooleanArray();
     }
 
-    ArrayList<User> list_selected_users() {
+    public ArrayList<User> list_selected_users() {
         ArrayList<User> list = new ArrayList<>();
 
         if (clickable) {

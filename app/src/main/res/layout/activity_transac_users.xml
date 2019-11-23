@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".add_friend_or_group.GetGroupUsers">
+    tools:context=".transaction.SelectTransactionUsers">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -17,7 +17,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/friends_list"
+        android:id="@+id/transactors_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
