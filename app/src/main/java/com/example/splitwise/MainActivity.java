@@ -3,6 +3,7 @@ package com.example.splitwise;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,8 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.splitwise.login_or_signup.SignupPage;
-import com.example.splitwise.transaction.TransactionRecord;
-import com.example.splitwise.transaction.UserTransact;
 import com.example.splitwise.ui.add.AddFriend;
 import com.example.splitwise.ui.add.CreateGroup;
 import com.example.splitwise.ui.add.User;
@@ -28,12 +27,15 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 import java.util.Objects;
+
+import javax.annotation.Nullable;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
     FirestoreHelper firestoreHelper;
     ViewPager viewPager;
+    public AmountTypeDoc userDoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,15 +69,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        UserTransact u1 = new UserTransact("anubhav@splitwise.clone","anubhav",40,50);
-        UserTransact u2 = new UserTransact("atulya@splitwise.clone","atulya",30,60);
-        UserTransact u3 = new UserTransact("sahil@splitwise.clone","sahil",90,50);
-        List<UserTransact> l1 = new ArrayList<>();
-        l1.add(u1);l1.add(u2);l1.add(u3);
-        Calendar today = Calendar.getInstance();
-        today.set(Calendar.HOUR_OF_DAY, 0);
-        TransactionRecord record = new TransactionRecord("13LX1YhaUA3rwXn4nSgR",l1,"checking",160,"food",today.getTime());
-        firestoreHelper.processTransaction(record);
+
     }
 
     @Override
@@ -135,5 +130,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DocumentReference userRef = firestoreHelper.getUserRef();
+        userRef.addSnapshotListener(this,new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(e!=null)
+                {
+                    Log.i("user main activity", e.getMessage());
+                }
+                else
+                {
+                    userDoc = documentSnapshot.toObject(AmountTypeDoc.class);
+                }
+            }
+        });
+    }
 }

@@ -1,8 +1,6 @@
 package com.example.splitwise.ui.main;
 
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.splitwise.AmountTypeDoc;
 import com.example.splitwise.FirestoreHelper;
 import com.example.splitwise.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -84,33 +80,30 @@ public class PlaceholderFragment extends Fragment {
             collectionReference = firestoreHelper.getUserRef().collection(getString(R.string.user_groups));
         }
         if(collectionReference!=null) {
+
+
             collectionReference.addSnapshotListener(Objects.requireNonNull(getActivity()), new EventListener<QuerySnapshot>() {
                 @Override
-                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                public void onEvent(final @Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
                     if (e != null) {
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     } else {
                         list_items.clear();
-
-                        for (DocumentSnapshot documentSnapshot : Objects.requireNonNull(queryDocumentSnapshots)) {
-                        firestoreHelper.getUserColRef().document(firestoreHelper.getUserId()).get()
-                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        list_items.add(documentSnapshot.toObject(AmountTypeDoc.class));
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.i("myself not found", e.getMessage());
-                            }
-                        });
-
-                            AmountTypeDoc temp = documentSnapshot.toObject(AmountTypeDoc.class);
+                        double total_balance=0;
+                        for (DocumentSnapshot documentSnapshot2 : Objects.requireNonNull(queryDocumentSnapshots)) {
+                            AmountTypeDoc temp = documentSnapshot2.toObject(AmountTypeDoc.class);
+                            total_balance=total_balance+temp.getAmount();
+                        }
+                        AmountTypeDoc myself = new AmountTypeDoc("User",total_balance);
+                        list_items.add(myself);
+                        for (DocumentSnapshot documentSnapshot2 : Objects.requireNonNull(queryDocumentSnapshots)) {
+                            AmountTypeDoc temp = documentSnapshot2.toObject(AmountTypeDoc.class);
                             list_items.add(temp);
                         }
                         adapter.notifyDataSetChanged();
+
+
                     }
                 }
             });

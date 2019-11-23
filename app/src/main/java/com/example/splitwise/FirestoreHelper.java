@@ -32,9 +32,17 @@ public class FirestoreHelper {
     private FirebaseUser firebaseUser;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference userColRef;
-
+    private AmountTypeDoc userDoc;
     public DocumentReference getUserRef() {
         return userRef;
+    }
+
+    public AmountTypeDoc getUserDoc() {
+        return userDoc;
+    }
+
+    public void setUserDoc(AmountTypeDoc userDoc) {
+        this.userDoc = userDoc;
     }
 
     private DocumentReference userRef;
@@ -221,6 +229,8 @@ public class FirestoreHelper {
                 });
 
     }
+
+
     public List<Pair<IdAmountDocPair, List< IdAmountDocPair> >> findSolution(List<UserTransact> userTransacts)
     {
         List<Pair<IdAmountDocPair, List< IdAmountDocPair> >> solution= new ArrayList<>();
@@ -587,4 +597,6 @@ public class FirestoreHelper {
             }
         }
     }
+
+
 }

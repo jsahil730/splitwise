@@ -37,7 +37,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (position == 0) {
                 return Header;
             }
-            else if (position == list_items.size()+1) {
+            else if (position == list_items.size()) {
                 return Footer;
             }
             else {
@@ -84,6 +84,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
@@ -99,7 +100,18 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         else {
             switch (getItemViewType(position)) {
                 case Header:
-//                    ((HeaderViewHolder) holder).total_balance.setText();
+                    System.out.println("hello bitch");
+                    if (list_items != null) {
+                        for (AmountTypeDoc a : list_items) {
+                            System.out.println(a.getName());
+                        }
+                    }
+                    if(!list_items.isEmpty()){
+                    double amount = list_items.get(0).getAmount();
+                    amount *= 100;
+                    amount = (double) Math.round(amount);
+                    amount = amount/100;
+                    ((HeaderViewHolder) holder).total_balance.setText(String.format("Your Current Balance is : %.2f",amount));}
                     break;
                 case Normal:
                     AmountTypeDoc pair = list_items.get(position);
@@ -125,7 +137,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             s = String.format("you owe \n %.2f",amount);
         }
         else {
-            s = String.format("owes you \n %.2f",amount);
+            s = String.format("owes you \n %.2f",-amount);
         }
         return s;
     }
@@ -136,7 +148,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return (list_items.size()+1);
         }
         else {
-            return (list_items.size()+2);
+            return (list_items.size()+1);
         }
     }
 
