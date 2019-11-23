@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.splitwise.login_or_signup.SignupPage;
+import com.example.splitwise.transaction.TransactionRecord;
+import com.example.splitwise.transaction.UserTransact;
 import com.example.splitwise.ui.add.AddFriend;
 import com.example.splitwise.ui.add.CreateGroup;
 import com.example.splitwise.ui.add.User;
@@ -29,6 +31,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,6 +65,16 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        UserTransact u1 = new UserTransact("anubhav@splitwise.clone","anubhav",40,50);
+        UserTransact u2 = new UserTransact("atulya@splitwise.clone","atulya",30,60);
+        UserTransact u3 = new UserTransact("sahil@splitwise.clone","sahil",90,50);
+        List<UserTransact> l1 = new ArrayList<>();
+        l1.add(u1);l1.add(u2);l1.add(u3);
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        TransactionRecord record = new TransactionRecord("13LX1YhaUA3rwXn4nSgR",l1,"checking",160,"food",today.getTime());
+        firestoreHelper.processTransaction(record);
     }
 
     @Override

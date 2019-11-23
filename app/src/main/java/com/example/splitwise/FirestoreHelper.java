@@ -20,9 +20,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.List;
+
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -233,9 +233,12 @@ public class FirestoreHelper {
             IdAmountDocPair temp= new IdAmountDocPair(userTransact.getUserID(),
                     new AmountTypeDoc(userTransact.getName(),
                             (userTransact.getStake()-userTransact.getAmount_paid())));
+            IdAmountDocPair temp3= new IdAmountDocPair(userTransact.getUserID(),
+                        new AmountTypeDoc(userTransact.getName(),
+                                (userTransact.getStake()-userTransact.getAmount_paid())));
             amounts.add(temp);
             List<IdAmountDocPair> temp2= new ArrayList<>();
-            solution.add(Pair.create(temp, temp2));
+            solution.add(Pair.create(temp3, temp2));
 
         }
 
@@ -370,7 +373,7 @@ public class FirestoreHelper {
                     .document(record.getTag())
                     .collection(res.getString(R.string.TransactionItems));
 
-            collectionReference.add(transacDoc)
+            collectionReference.add(transacDoc)    //adding transaction to the groups group transaction collection
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
@@ -408,7 +411,41 @@ public class FirestoreHelper {
             CollectionReference groupUserCol = groupsRef.document(record.getGroupID()).collection(res.getString(R.string.GroupUsers));
             for(Pair<IdAmountDocPair, List< IdAmountDocPair> > one_user: solution)
             {
+
                 final IdAmountDocPair t1 = one_user.first;
+                final double new_amount_owed = t1.getAmount();
+                final DocumentReference user_spec_group= userColRef.document(t1.getId()).collection(res.getString(R.string.user_groups))
+                        .document(record.getGroupID());
+                user_spec_group.get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                double new_amount = documentSnapshot.toObject(AmountTypeDoc.class).getAmount()+new_amount_owed;
+                                user_spec_group.update("amount",new_amount);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("firestoreHelper", e.getMessage());
+                    }
+                });
+
+                final DocumentReference user_doc = userColRef.document(t1.getId());
+                user_doc.get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                double new_amount = documentSnapshot.toObject(AmountTypeDoc.class).getAmount()+new_amount_owed;
+                                user_doc.update("amount",new_amount);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("error in userdocupdate", e.getMessage());
+                    }
+                });
+
+
                 final List<IdAmountDocPair> t2 = one_user.second;
                 final DocumentReference documentReference= groupUserCol.document(t1.getId());
                 documentReference.get()
@@ -490,6 +527,8 @@ public class FirestoreHelper {
                             }
                         });
             }
+
+
         }// adds the transaction in the group and updates the group users collection accordingly
 
 

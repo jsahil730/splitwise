@@ -2,7 +2,7 @@ package com.example.splitwise.ui.main;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Pair;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +10,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.splitwise.AmountTypeDoc;
 import com.example.splitwise.FirestoreHelper;
-import com.example.splitwise.IdTypeDoc;
-import com.example.splitwise.MainActivity;
 import com.example.splitwise.R;
-import com.example.splitwise.ui.add.User;
-import com.google.api.SystemParameterOrBuilder;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -95,7 +92,21 @@ public class PlaceholderFragment extends Fragment {
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     } else {
                         list_items.clear();
+
                         for (DocumentSnapshot documentSnapshot : Objects.requireNonNull(queryDocumentSnapshots)) {
+                        firestoreHelper.getUserColRef().document(firestoreHelper.getUserId()).get()
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        list_items.add(documentSnapshot.toObject(AmountTypeDoc.class));
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.i("myself not found", e.getMessage());
+                            }
+                        });
+
                             AmountTypeDoc temp = documentSnapshot.toObject(AmountTypeDoc.class);
                             list_items.add(temp);
                         }

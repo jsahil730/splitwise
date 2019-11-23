@@ -2,7 +2,6 @@ package com.example.splitwise.ui.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.splitwise.AmountTypeDoc;
 import com.example.splitwise.R;
-import com.example.splitwise.ui.add.User;
 
 import java.util.List;
 
@@ -104,7 +102,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //                    ((HeaderViewHolder) holder).total_balance.setText();
                     break;
                 case Normal:
-                    AmountTypeDoc pair = list_items.get(position-1);
+                    AmountTypeDoc pair = list_items.get(position);
                     ((ExpenseViewHolder) holder).name.setText(pair.getName());
                     ((ExpenseViewHolder) holder).amount.setText(getText(pair.getAmount()));
                     break;
