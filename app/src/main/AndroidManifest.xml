@@ -11,12 +11,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.add.GetGroupUsers"
+        <activity android:name=".transaction.AddTransaction"></activity>
+        <activity
+            android:name=".ui.add.GetGroupUsers"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.add.CreateGroup"
+        <activity
+            android:name=".ui.add.CreateGroup"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".login_or_signup.LoginActivity"
             android:screenOrientation="portrait"
