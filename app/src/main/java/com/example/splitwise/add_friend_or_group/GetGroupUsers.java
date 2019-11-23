@@ -1,4 +1,4 @@
-package com.example.splitwise.ui.add;
+package com.example.splitwise.add_friend_or_group;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
