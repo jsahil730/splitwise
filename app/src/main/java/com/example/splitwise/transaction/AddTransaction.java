@@ -1,5 +1,4 @@
 package com.example.splitwise.transaction;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
