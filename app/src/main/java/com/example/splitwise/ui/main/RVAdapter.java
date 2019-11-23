@@ -22,11 +22,11 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int Normal = 2;
     private static final int Footer = 3;
 
-    private boolean activity_tab = false;
+    private boolean activity_tab;
     private Context context;
     private List<AmountTypeDoc> list_items;
 
-    public RVAdapter(boolean activity_tab, Context context, List<AmountTypeDoc> list_items) {
+    RVAdapter(boolean activity_tab, Context context, List<AmountTypeDoc> list_items) {
         this.activity_tab = activity_tab;
         this.context = context;
         this.list_items = list_items;
@@ -105,12 +105,29 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 case Normal:
                     AmountTypeDoc pair = list_items.get(position-1);
                     ((ExpenseViewHolder) holder).name.setText(pair.getName());
-                    ((ExpenseViewHolder) holder).amount.setText(""+pair.getAmount());
+                    ((ExpenseViewHolder) holder).amount.setText(getText(pair.getAmount()));
                     break;
                 case Footer:
                     break;
             }
         }
+    }
+
+    private String getText(Double amount) {
+        String s;
+        amount *= 100;
+        amount = (double) Math.round(amount);
+        amount = amount/100;
+        if (amount.floatValue() == 0) {
+            s = "settled up";
+        }
+        else if (amount > 0) {
+            s = "you owe \n" + amount;
+        }
+        else {
+            s = "owes you \n" + amount;
+        }
+        return s;
     }
 
     @Override
@@ -148,7 +165,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
         TextView total_balance;
 
-        public HeaderViewHolder(@NonNull View itemView) {
+        HeaderViewHolder(@NonNull View itemView) {
             super(itemView);
 
             total_balance = itemView.findViewById(R.id.total_balance);

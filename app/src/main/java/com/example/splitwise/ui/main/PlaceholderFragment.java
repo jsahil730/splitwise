@@ -29,6 +29,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -43,15 +44,7 @@ public class PlaceholderFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private List<AmountTypeDoc> list_items;
     private int index;
-    FirestoreHelper firestoreHelper;
-
-//    public static PlaceholderFragment newInstance(int index) {
-//        PlaceholderFragment fragment = new PlaceholderFragment();
-//        Bundle bundle = new Bundle();
-//        bundle.putInt(ARG_SECTION_NUMBER, index);
-//        fragment.setArguments(bundle);
-//        return fragment;
-//    }
+    private FirestoreHelper firestoreHelper;
 
     PlaceholderFragment(int index)
     {
@@ -65,7 +58,7 @@ public class PlaceholderFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
-        firestoreHelper= new FirestoreHelper(getActivity());
+        firestoreHelper= new FirestoreHelper(Objects.requireNonNull(getActivity()));
 
         recyclerView = root.findViewById(R.id.friends_or_groups);
         recyclerView.setHasFixedSize(true);
@@ -84,7 +77,6 @@ public class PlaceholderFragment extends Fragment {
         super.onStart();
 
         CollectionReference collectionReference=null;
-        Resources res = getActivity().getResources();
         if(index==1) {
             // fragment is friends fragment
             // list will be friends list
@@ -92,10 +84,10 @@ public class PlaceholderFragment extends Fragment {
         }
         else if(index==2){
 
-            collectionReference = firestoreHelper.getUserRef().collection(res.getString(R.string.user_groups));
+            collectionReference = firestoreHelper.getUserRef().collection(getString(R.string.user_groups));
         }
         if(collectionReference!=null) {
-            collectionReference.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
+            collectionReference.addSnapshotListener(Objects.requireNonNull(getActivity()), new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
@@ -103,12 +95,10 @@ public class PlaceholderFragment extends Fragment {
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     } else {
                         list_items.clear();
-                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        for (DocumentSnapshot documentSnapshot : Objects.requireNonNull(queryDocumentSnapshots)) {
                             AmountTypeDoc temp = documentSnapshot.toObject(AmountTypeDoc.class);
                             list_items.add(temp);
                         }
-
-                        System.out.println(list_items);
                         adapter.notifyDataSetChanged();
                     }
                 }

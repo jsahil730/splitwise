@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class FirestoreHelper {
     private FirebaseAuth firebaseAuth;
@@ -73,7 +74,7 @@ public class FirestoreHelper {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-        userId = firebaseUser.getEmail();
+        userId = Objects.requireNonNull(firebaseUser).getEmail();
         res = context.getResources();
         userColRef = db.collection(res.getString(R.string.UserCollection));
         userRef = userColRef.document(userId);
@@ -128,12 +129,11 @@ public class FirestoreHelper {
 
                                                                 if (documentSnapshot.exists()) {
                                                                     IdTypeDoc friend_to_be_added = documentSnapshot.toObject(IdTypeDoc.class);
-                                                                    AmountTypeDoc friendDoc = new AmountTypeDoc(friend_to_be_added.getName(), 0);
+                                                                    AmountTypeDoc friendDoc = new AmountTypeDoc(Objects.requireNonNull(friend_to_be_added).getName(), 0);
 
                                                                     main_friends.document(to_be_added).set(friendDoc);
 
 
-                                                                } else {
                                                                 }
                                                             }
                                                         })
@@ -144,8 +144,6 @@ public class FirestoreHelper {
                                                                 Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                                                             }
                                                         });
-
-                                            } else {
 
                                             }
 
@@ -204,7 +202,7 @@ public class FirestoreHelper {
                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
 
                                             IdTypeDoc user_mem = documentSnapshot.toObject(IdTypeDoc.class);
-                                            AmountTypeDoc to_add = new AmountTypeDoc(user_mem.getName(),0);
+                                            AmountTypeDoc to_add = new AmountTypeDoc(Objects.requireNonNull(user_mem).getName(),0);
                                             groupUserscollRef.document(mem).set(to_add);
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
@@ -290,9 +288,6 @@ public class FirestoreHelper {
 
                     solution.get(i).second.add(transferAB);
                     solution.get(j).second.add(transferBA);
-
-                    continue;
-
                 }
 
             }
@@ -425,7 +420,7 @@ public class FirestoreHelper {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 AmountTypeDoc temp = documentSnapshot.toObject(AmountTypeDoc.class);
-                                double new_amount = temp.getAmount()+t1.getAmount();
+                                double new_amount = Objects.requireNonNull(temp).getAmount()+t1.getAmount();
                                 documentReference.update("amount",new_amount)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
@@ -436,7 +431,7 @@ public class FirestoreHelper {
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Log.i("bye", e.getMessage());
+                                                Log.i("bye", Objects.requireNonNull(e.getMessage()));
                                             }
                                         });
 
@@ -456,7 +451,7 @@ public class FirestoreHelper {
                                                     else
                                                     {
                                                         AmountTypeDoc temp1 = documentSnapshot.toObject(AmountTypeDoc.class);
-                                                        double new_amount = temp1.getAmount()+sec_person.getAmount();
+                                                        double new_amount = Objects.requireNonNull(temp1).getAmount()+sec_person.getAmount();
                                                         if(new_amount!=0)
                                                         {
                                                             second_doc_ref.update("amount",new_amount)
@@ -469,7 +464,7 @@ public class FirestoreHelper {
                                                                     .addOnFailureListener(new OnFailureListener() {
                                                                         @Override
                                                                         public void onFailure(@NonNull Exception e) {
-                                                                            Log.i("update error in borrow", e.getMessage());
+                                                                            Log.i("update error in borrow", Objects.requireNonNull(e.getMessage()));
                                                                         }
                                                                     });
                                                         }
@@ -482,7 +477,7 @@ public class FirestoreHelper {
                                                             }).addOnFailureListener(new OnFailureListener() {
                                                                 @Override
                                                                 public void onFailure(@NonNull Exception e) {
-                                                                    Log.i("deletion error", e.getMessage());
+                                                                    Log.i("deletion error", Objects.requireNonNull(e.getMessage()));
                                                                 }
                                                             });
                                                         }
@@ -492,7 +487,7 @@ public class FirestoreHelper {
                                             .addOnFailureListener(new OnFailureListener() {
                                                 @Override
                                                 public void onFailure(@NonNull Exception e) {
-                                                    Log.i("borrowers problem", e.getMessage());
+                                                    Log.i("borrowers problem", Objects.requireNonNull(e.getMessage()));
                                                 }
                                             });
                                 }
@@ -533,7 +528,7 @@ public class FirestoreHelper {
                                 else
                                 {
                                     friendsDocRef.update("amount",
-                                            (documentSnapshot.toObject(AmountTypeDoc.class).getAmount()+personB.getAmount()));
+                                            (Objects.requireNonNull(documentSnapshot.toObject(AmountTypeDoc.class)).getAmount()+personB.getAmount()));
                                 }
 
                             }
