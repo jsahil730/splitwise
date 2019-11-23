@@ -28,4 +28,5 @@
     <string name="key_name_group">group_name</string>
     <string name="key_friends">friends_list</string>
     <string name="key_users_selection">selected_users</string>
+    <string name="Next">next</string>
 </resources>
