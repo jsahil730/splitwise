@@ -4,15 +4,25 @@
     <string name="tab_text_2">Groups</string>
     <string name="tab_text_3">Activity</string>
     <string name="textview">TextView</string>
+    <string name="group_name">Group Name</string>
+    <string name="enter_group_name">Enter Group Name here</string>
+    <string name="add_people_group">Add people to group</string>
     <string name="sign_out">Sign Out</string>
+    <string name="add_friend">Add Friend</string>
+    <string name="add_group">Create New Group</string>
+    <string name="settings">Settings</string>
     <string name="UserCollection"> Users</string>
     <string name="FriendsCollection">FriendList</string>
     <string name="user_groups">GroupList</string>
-    <string name="add_friend">Enter user ID here</string>
-    <string name="finish_button">Done</string>
     <string name="GroupsCollection">Groups</string>
     <string name="GroupUsers">Group Users</string>
     <string name="borrowersCollection">Borrowers</string>
     <string name="groupTransactionCollection">Group Transactions</string>
     <string name="nonGroupTransactionCollection">Non Group Transactions</string>
+    <string name="write_friend">Enter user ID here</string>
+    <string name="save_button">Save</string>
+    <string name="finish_button">Finish</string>
+    <string name="key_name_group">group_name</string>
+    <string name="key_friends">friends_list</string>
+    <string name="key_users_selection">selected_users</string>
 </resources>

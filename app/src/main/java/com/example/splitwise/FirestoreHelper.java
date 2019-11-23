@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.splitwise.ui.add.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,12 +21,30 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.List;
+
 public class FirestoreHelper {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference userColRef;
+
+    public DocumentReference getUserRef() {
+        return userRef;
+    }
+
     private DocumentReference userRef;
+
+    @NonNull
+    public CollectionReference getUserColRef() {
+        return userColRef;
+    }
+
+    @NonNull
+    public CollectionReference getFriendsColRef() {
+        return friendsColRef;
+    }
+
     private CollectionReference friendsColRef;
     private String userId;
     private Resources res;
@@ -36,6 +55,11 @@ public class FirestoreHelper {
 
 
     public FirestoreHelper() {
+    }
+
+    @NonNull
+    public String getUserId() {
+        return userId;
     }
 
     public FirestoreHelper(Context context) {
@@ -195,33 +219,4 @@ public class FirestoreHelper {
                 });
 
     }
-
-    public List<Pair<String,String>> getFriendList()
-    {
-        List<Pair<String,String>> ret= new ArrayList<>();
-
-        String myName=userRef.get().getResult().toObject(IdTypeDoc.class).getName();
-
-        ret.add(new Pair<String, String>(userId,myName));
-        QuerySnapshot queryDocumentSnapshots= friendsColRef.get()
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .getResult();
-
-        for(DocumentSnapshot documentSnapshot: queryDocumentSnapshots)
-        {
-            ret.add(new Pair<String, String>(documentSnapshot.getId(),documentSnapshot.toObject(IdTypeDoc.class).getName()));
-        }
-
-
-
-
-        return ret;
-
-    }
-
 }

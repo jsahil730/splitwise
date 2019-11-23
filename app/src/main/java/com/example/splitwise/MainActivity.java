@@ -1,26 +1,35 @@
 package com.example.splitwise;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.splitwise.ui.add_friend.AddFriend;
+import com.example.splitwise.login_or_signup.SignupPage;
+import com.example.splitwise.ui.add.AddFriend;
+import com.example.splitwise.ui.add.CreateGroup;
+import com.example.splitwise.ui.add.User;
 import com.example.splitwise.ui.main.SectionsPagerAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,10 +61,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-
-
-
     }
 
     @Override
@@ -71,25 +76,50 @@ public class MainActivity extends AppCompatActivity {
             case R.id.sign_out:
                 firebaseAuth.signOut();
 
-                Intent intent=new Intent(getApplicationContext(),SignupPage.class);
+                Intent intent1=new Intent(getApplicationContext(), SignupPage.class);
 
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent1);
 
                 return true;
             case R.id.settings:
                 return true;
             case R.id.add_friend:
-                add_friend_func();
+                Intent intent3 = new Intent(this, AddFriend.class);
+                startActivity(intent3);
+                return true;
+            case R.id.create_group:
+                FirestoreHelper firestoreHelper = new FirestoreHelper(this);
+                final String uid = firestoreHelper.getUserId();
+                firestoreHelper.getUserRef().get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String uname = Objects.requireNonNull(documentSnapshot.toObject(IdTypeDoc.class)).getName();
+
+                        Intent intent4 = new Intent(MainActivity.this, CreateGroup.class);
+
+                        Bundle bundle = new Bundle();
+                        ArrayList<User> userref = new ArrayList<>();
+                        userref.add(new User(uid,uname));
+                        bundle.putParcelableArrayList(getString(R.string.key_users_selection),userref);
+                        intent4.putExtras(bundle);
+
+                        startActivity(intent4);
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                })
+                ;
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void add_friend_func() {
-        Intent intent = new Intent(this, AddFriend.class);
 
-        startActivity(intent);
-    }
 }

@@ -1,4 +1,4 @@
-package com.example.splitwise;
+package com.example.splitwise.login_or_signup;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.splitwise.FirestoreHelper;
+import com.example.splitwise.MainActivity;
+import com.example.splitwise.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -80,7 +83,7 @@ public class SignupPage extends AppCompatActivity {
 
 
 
-                                        Intent intent= new Intent(SignupPage.this,MainActivity.class);
+                                        Intent intent= new Intent(SignupPage.this, MainActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         Toast.makeText(SignupPage.this,"Registered successfully",
                                                 Toast.LENGTH_SHORT).show();

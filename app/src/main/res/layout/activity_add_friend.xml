@@ -15,40 +15,28 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
+        <Button
+            android:id="@+id/save_friend"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_height="match_parent"
+            android:text="@string/save_button"
+            android:layout_gravity="right" />
 
-            android:layout_marginRight="40dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="3dp" />
     </androidx.appcompat.widget.Toolbar>
 
     <EditText
         android:id="@+id/add_friend"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/add_friend"
+        android:hint="@string/write_friend"
         android:inputType="text"
-        app:layout_constraintEnd_toStartOf="@id/save_friend"
+        android:textSize="17sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <Button
-        android:id="@+id/save_friend"
-        android:layout_width="111dp"
-        android:layout_height="wrap_content"
-        android:text="@string/finish_button"
-        app:layout_constraintBottom_toBottomOf="@+id/add_friend"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/add_friend"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

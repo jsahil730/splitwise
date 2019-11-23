@@ -1,9 +1,11 @@
-package com.example.splitwise;
+package com.example.splitwise.login_or_signup;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.splitwise.MainActivity;
+import com.example.splitwise.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
