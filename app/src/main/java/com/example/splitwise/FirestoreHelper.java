@@ -867,7 +867,31 @@ public class FirestoreHelper {
 
     }
 
+    public void settle_non_group(final String friendsId, final Date date)
+    {
+        CollectionReference myGroupList= userRef.collection(res.getString(R.string.user_groups));
 
+        myGroupList.get()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("", e.getMessage());
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        for(DocumentSnapshot group : queryDocumentSnapshots)
+                        {
+
+                            CollectionReference myGroupRef= groupsRef.document(group.getId())
+                                    .collection(res.getString(R.string.GroupUsers));
+
+                        }
+                    }
+                });
+    }
 
 
 
