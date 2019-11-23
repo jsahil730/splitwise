@@ -12,6 +12,7 @@ import com.example.splitwise.transaction.IdAmountDocPair;
 import com.example.splitwise.transaction.TransacDoc;
 import com.example.splitwise.transaction.TransactionRecord;
 import com.example.splitwise.transaction.UserTransact;
+import com.example.splitwise.ui.add.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,6 +21,10 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,16 +35,38 @@ public class FirestoreHelper {
     private FirebaseUser firebaseUser;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference userColRef;
+
+    public DocumentReference getUserRef() {
+        return userRef;
+    }
+
     private DocumentReference userRef;
+
+    @NonNull
+    public CollectionReference getUserColRef() {
+        return userColRef;
+    }
+
+    @NonNull
+    public CollectionReference getFriendsColRef() {
+        return friendsColRef;
+    }
+
     private CollectionReference friendsColRef;
     private String userId;
     private Resources res;
     private Context context;
 
+
     private CollectionReference groupsRef;
 
 
     public FirestoreHelper() {
+    }
+
+    @NonNull
+    public String getUserId() {
+        return userId;
     }
 
     public FirestoreHelper(Context context) {
@@ -79,28 +106,49 @@ public class FirestoreHelper {
             return ;
         }
 
-        final CollectionReference main_friends = userColRef.document(id1).collection(res.getString(R.string.FriendsCollection));
 
-        main_friends.document(to_be_added).get()
+        userColRef.document(id1).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (!documentSnapshot.exists()) {
-
-                            userColRef.document(to_be_added).get()
+                        if(documentSnapshot.exists())
+                        {
+                            final CollectionReference main_friends = userColRef.document(id1)
+                                    .collection(res.getString(R.string.FriendsCollection));
+                            main_friends.document(to_be_added).get()
                                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                         @Override
                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            if (!documentSnapshot.exists()) {
 
-                                            if (documentSnapshot.exists()) {
-                                                IdTypeDoc friend_to_be_added = documentSnapshot.toObject(IdTypeDoc.class);
-                                                AmountTypeDoc friendDoc = new AmountTypeDoc(friend_to_be_added.getName(), 0);
+                                                userColRef.document(to_be_added).get()
+                                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                                                main_friends.document(to_be_added).set(friendDoc);
+                                                                if (documentSnapshot.exists()) {
+                                                                    IdTypeDoc friend_to_be_added = documentSnapshot.toObject(IdTypeDoc.class);
+                                                                    AmountTypeDoc friendDoc = new AmountTypeDoc(friend_to_be_added.getName(), 0);
 
+                                                                    main_friends.document(to_be_added).set(friendDoc);
+
+
+                                                                } else {
+                                                                }
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+
+                                                                Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                                                            }
+                                                        });
 
                                             } else {
+
                                             }
+
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -110,20 +158,10 @@ public class FirestoreHelper {
                                             Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                                         }
                                     });
-
-                        } else {
-
                         }
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
+
     }
 
     /**
@@ -133,6 +171,7 @@ public class FirestoreHelper {
 
 
     public void addFriend(final String friendId) {
+       // Toast.makeText(context, "No error", Toast.LENGTH_SHORT).show();
 
         add_one_direction(userId,friendId);
         add_one_direction(friendId,userId);
@@ -188,7 +227,6 @@ public class FirestoreHelper {
                 });
 
     }
-
     public List<Pair<IdAmountDocPair, List< IdAmountDocPair> >> findSolution(List<UserTransact> userTransacts)
     {
         List<Pair<IdAmountDocPair, List< IdAmountDocPair> >> solution= new ArrayList<>();

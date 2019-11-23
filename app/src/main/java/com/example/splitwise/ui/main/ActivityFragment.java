@@ -15,19 +15,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.splitwise.AmountTypeDoc;
 import com.example.splitwise.R;
-import com.example.splitwise.RVAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityFragment extends Fragment {
-
-    private ActivityViewModel mViewModel;
-    private static final String ARG_SECTION_NUMBER = "section_number";
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private List<Pair<String,String>> list_items;
+    private List<AmountTypeDoc> list_items;
 
     public static ActivityFragment newInstance() {
         return new ActivityFragment();
@@ -44,22 +41,9 @@ public class ActivityFragment extends Fragment {
 
         list_items = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
-            list_items.add(Pair.create("card"+i,"owes"+i));
-        }
-
-
         adapter = new RVAdapter(true,this.getContext(),list_items);
         recyclerView.setAdapter(adapter);
 
         return root;
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ActivityViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
 }
