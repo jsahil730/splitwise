@@ -19,6 +19,9 @@
     <string name="borrowersCollection">Borrowers</string>
     <string name="groupTransactionCollection">Group Transactions</string>
     <string name="nonGroupTransactionCollection">Non Group Transactions</string>
+    <string name="TransactionItems">Transaction Items</string>
+    <string name="AllExchanges">All exchanges</string>
+    <string name="userSpecificExchanges">Amounts owed</string>
     <string name="write_friend">Enter user ID here</string>
     <string name="save_button">Save</string>
     <string name="finish_button">Finish</string>
