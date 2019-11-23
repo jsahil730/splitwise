@@ -1,6 +1,4 @@
-package com.example.splitwise.ui.main;
-
-import androidx.lifecycle.ViewModelProviders;
+package com.example.splitwise.main;
 
 import android.os.Bundle;
 
@@ -10,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

@@ -1,4 +1,4 @@
-package com.example.splitwise.ui.add;
+package com.example.splitwise.add_friend_or_group;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,8 +59,6 @@ public class CreateGroup extends AppCompatActivity {
         recyclerView = findViewById(R.id.users_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
-        final FirestoreHelper firestoreHelper = new FirestoreHelper(this);
 
         add_people.setOnClickListener(new View.OnClickListener() {
             @Override

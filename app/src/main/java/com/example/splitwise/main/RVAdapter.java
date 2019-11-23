@@ -1,4 +1,4 @@
-package com.example.splitwise.ui.main;
+package com.example.splitwise.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

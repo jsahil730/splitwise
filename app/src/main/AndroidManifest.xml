@@ -11,12 +11,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".transaction.AddTransaction"></activity>
+        <activity android:name=".transaction.SelectTransactionUsers"></activity>
         <activity
-            android:name=".ui.add.GetGroupUsers"
+            android:name=".transaction.AddTransaction"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.add.CreateGroup"
+            android:name=".add_friend_or_group.GetGroupUsers"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".add_friend_or_group.CreateGroup"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
@@ -41,7 +45,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ActionBar" />
         <activity
-            android:name=".ui.add.AddFriend"
+            android:name=".add_friend_or_group.AddFriend"
             android:screenOrientation="portrait" />
     </application>
 
