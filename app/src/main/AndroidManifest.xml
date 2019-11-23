@@ -12,10 +12,12 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".ui.add.GetGroupUsers"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar"/>
         <activity android:name=".ui.add.CreateGroup"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar"
             />
         <activity
             android:name=".login_or_signup.LoginActivity"

@@ -20,11 +20,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
-import java.util.List;
-
-
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class FirestoreHelper {
@@ -597,6 +598,277 @@ public class FirestoreHelper {
             }
         }
     }
+
+    public void processSolutionForGroup(final List<Pair<IdAmountDocPair, List< IdAmountDocPair> >> solution, String GroupId, double total_amount, Date date)
+    {
+        CollectionReference collectionReference= groupsRef.document(GroupId)
+                .collection(res.getString(R.string.groupTransactionCollection))
+                .document("others")
+                .collection(res.getString(R.string.TransactionItems));
+        final TransacDoc transacDoc = new TransacDoc(GroupId,"Settle Up Transaction",total_amount,"others",date);
+
+        collectionReference.add(transacDoc)    //adding transaction to the groups group transaction collection
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+
+                        CollectionReference allExchanges= documentReference
+                                .collection(res.getString(R.string.AllExchanges));
+
+                        for(int i=0; i< solution.size() ; i++)
+                        {
+                            final int i2=i;
+                            final AmountTypeDoc amountTypeDoc= new AmountTypeDoc(solution.get(i).first.getName(),
+                                    solution.get(i).first.getAmount());
+                            DocumentReference depth_one= allExchanges.document(solution.get(i).first.getId());
+                            final CollectionReference userSpecific= depth_one.collection(res.getString(R.string.userSpecificExchanges));
+
+                            depth_one
+                                    .set(amountTypeDoc)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            List<IdAmountDocPair> listSecond= solution.get(i2).second;
+                                            for(IdAmountDocPair idAmountDocPair: listSecond)
+                                            {
+                                                AmountTypeDoc amountTypeDoc1= new AmountTypeDoc(idAmountDocPair.getName()
+                                                        ,idAmountDocPair.getAmount());
+
+                                                userSpecific.document(idAmountDocPair.getId()).set(amountTypeDoc1);
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
+
+        CollectionReference groupUserCol = groupsRef.document(GroupId).collection(res.getString(R.string.GroupUsers));
+        for(Pair<IdAmountDocPair, List< IdAmountDocPair> > one_user: solution)
+        {
+
+            final IdAmountDocPair t1 = one_user.first;
+            final double new_amount_owed = t1.getAmount();
+            final DocumentReference user_spec_group= userColRef.document(t1.getId()).collection(res.getString(R.string.user_groups))
+                    .document(GroupId);
+            user_spec_group.get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            double new_amount = documentSnapshot.toObject(AmountTypeDoc.class).getAmount()+new_amount_owed;
+                            user_spec_group.update("amount",new_amount);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.i("firestoreHelper", e.getMessage());
+                }
+            });
+
+            final DocumentReference user_doc = userColRef.document(t1.getId());
+            user_doc.get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            double new_amount = documentSnapshot.toObject(AmountTypeDoc.class).getAmount()+new_amount_owed;
+                            user_doc.update("amount",new_amount);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.i("error in userdocupdate", e.getMessage());
+                }
+            });
+
+
+            final List<IdAmountDocPair> t2 = one_user.second;
+            final DocumentReference documentReference= groupUserCol.document(t1.getId());
+            documentReference.get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            AmountTypeDoc temp = documentSnapshot.toObject(AmountTypeDoc.class);
+                            double new_amount = Objects.requireNonNull(temp).getAmount()+t1.getAmount();
+                            documentReference.update("amount",new_amount)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.i("hi", "onSuccess: updated amount");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.i("bye", Objects.requireNonNull(e.getMessage()));
+                                        }
+                                    });
+
+                            final CollectionReference userSpecificLenders= documentReference.collection(res.getString(R.string.borrowersCollection));
+                            for(final IdAmountDocPair sec_person : t2)
+                            {
+                                final DocumentReference second_doc_ref= userSpecificLenders.document(sec_person.getId());
+                                second_doc_ref.get()
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                if(!documentSnapshot.exists())
+                                                {
+                                                    AmountTypeDoc temp1 = new AmountTypeDoc(sec_person.getName(),sec_person.getAmount());
+                                                    userSpecificLenders.document(sec_person.getId()).set(temp1);
+                                                }
+                                                else
+                                                {
+                                                    AmountTypeDoc temp1 = documentSnapshot.toObject(AmountTypeDoc.class);
+                                                    double new_amount = Objects.requireNonNull(temp1).getAmount()+sec_person.getAmount();
+                                                    if(new_amount!=0)
+                                                    {
+                                                        second_doc_ref.update("amount",new_amount)
+                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
+                                                                        Log.i("okay", "okay");
+                                                                    }
+                                                                })
+                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                        Log.i("update error in borrow", Objects.requireNonNull(e.getMessage()));
+                                                                    }
+                                                                });
+                                                    }
+                                                    else{
+                                                        second_doc_ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                Log.i("okay", "onSuccess: okay");
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Log.i("deletion error", Objects.requireNonNull(e.getMessage()));
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.i("borrowers problem", Objects.requireNonNull(e.getMessage()));
+                                            }
+                                        });
+                            }
+                        }
+                    });
+        }
+
+        List< HashMap<String, IdAmountDocPair>> solutionHash= new ArrayList<>();
+
+        for(int i=0 ; i< solution.size() ; i++)   //Updated amounts awed/bowrrowed in friendlists of users
+        {
+            IdAmountDocPair personA= solution.get(i).first;
+            String personAid= personA.getId();
+            solutionHash.add(new HashMap<String, IdAmountDocPair>());
+
+            for( IdAmountDocPair personB2 : solution.get(i).second)
+            {
+                solutionHash.get(i).put(personB2.getId(), personB2);
+
+                final IdAmountDocPair personB = personB2;
+                String personBid= personB.getId();
+                final AmountTypeDoc friendsDoc= new AmountTypeDoc(personB.getName(), personB.getAmount());
+
+                final DocumentReference friendsDocRef= userColRef.document(personAid)
+                        .collection(res.getString(R.string.FriendsCollection))
+                        .document(personBid);
+                friendsDocRef.get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if(!documentSnapshot.exists())
+                                {
+                                    friendsDocRef.set(friendsDoc);
+                                }
+                                else
+                                {
+                                    friendsDocRef.update("amount",
+                                            (Objects.requireNonNull(documentSnapshot.toObject(AmountTypeDoc.class)).getAmount()+personB.getAmount()));
+                                }
+
+                            }
+                        });
+            }
+        }
+
+    }
+
+
+    public void settleGroup(final String groupId, final List<String> members, final Date date)
+    {
+        final CollectionReference myLendersRef= groupsRef.document(groupId).collection(res.getString(R.string.GroupUsers)).document(userId)
+                .collection(res.getString(R.string.borrowersCollection));
+
+
+
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(final DocumentSnapshot documentSnapshot) {
+
+                final String myName= documentSnapshot.toObject(AmountTypeDoc.class).getName();
+
+                myLendersRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        List<Pair<IdAmountDocPair, List< IdAmountDocPair> >> solution = new ArrayList<>();
+                        List<IdAmountDocPair> myBorrowers= new ArrayList<>();
+                        double myAmount=0;
+
+                        for(DocumentSnapshot documentSnapshot1 : queryDocumentSnapshots)
+                        {
+                            AmountTypeDoc borrowerDoc= documentSnapshot1.toObject(AmountTypeDoc.class);
+                            IdAmountDocPair borrower= new IdAmountDocPair(documentSnapshot1.getId(),
+                                    new AmountTypeDoc(borrowerDoc.getName(),borrowerDoc.getAmount()));
+
+                            if(members.contains(borrower.getId()))
+                            {
+                                AmountTypeDoc myDoc= new AmountTypeDoc(myName, borrower.getAmount());
+                                AmountTypeDoc theirDoc= new AmountTypeDoc(borrowerDoc.getName(), -1*borrowerDoc.getAmount());
+                                IdAmountDocPair theirDocPair= new IdAmountDocPair(borrower.getId(), theirDoc);
+                                myBorrowers.add(theirDocPair);
+                                IdAmountDocPair myDocPair= new IdAmountDocPair(userId, myDoc);
+                                List<IdAmountDocPair> theirBorrowers = new ArrayList<>();
+                                theirBorrowers.add(myDocPair);
+                                myAmount+= theirDoc.getAmount();
+                                solution.add(Pair.create(borrower, theirBorrowers));
+
+                            }
+
+
+                        }
+
+                        IdAmountDocPair myDocPair= new IdAmountDocPair(userId, new AmountTypeDoc(myName, myAmount));
+                        solution.add(Pair.create(myDocPair, myBorrowers));
+
+                        processSolutionForGroup(solution,groupId,myAmount,date);
+
+                    }
+                })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.i("", e.getMessage());
+                            }
+                        });
+
+            }
+        });
+
+
+    }
+
+
+
 
 
 }
