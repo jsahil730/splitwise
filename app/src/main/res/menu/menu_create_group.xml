@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".add_friend_or_group.CreateGroup">
+    tools:context="com.example.splitwise.ui.add.CreateGroup">
 
     <item
         android:id="@+id/save_group"

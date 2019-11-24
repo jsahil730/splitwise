@@ -1,4 +1,4 @@
-package com.example.splitwise.main;
+package com.example.splitwise.ui.main;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

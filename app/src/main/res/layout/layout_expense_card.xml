@@ -32,8 +32,7 @@
                 android:textColor="#000"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="30dp"
-                android:textSize="17sp"
-                tools:ignore="RtlHardcoded" />
+                android:textSize="17sp"/>
 
             <TextView
                 android:id="@+id/amount"
@@ -43,8 +42,7 @@
                 android:layout_centerVertical="true"
                 android:text="@string/textview"
                 android:textColor="#000"
-                android:textSize="17sp"
-                tools:ignore="RelativeOverlap,RtlHardcoded" />
+                android:textSize="17sp" />
 
         </RelativeLayout>
 
