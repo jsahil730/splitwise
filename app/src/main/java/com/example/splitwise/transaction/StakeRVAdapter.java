@@ -58,20 +58,28 @@ public class StakeRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         double amt2 = 0;
 
         for (UserTransact u : list_users) {
+
+            System.out.println(u.getAmount_paid());
+            System.out.println(u.getStake());
+
             if (!equal_sp) {
                 amt1 += u.getStake();
             }
             amt2 += u.getAmount_paid();
         }
         if (amt2 != total_amount) {
+            System.out.println(amt2);
             Toast.makeText(context, "Amount paid must sum up to total amount", Toast.LENGTH_SHORT).show();
             return null;
         }
         else if (!equal_sp && amt1 != total_amount) {
+            System.out.println(amt1);
             Toast.makeText(context, "Stakes must sum up to total amount", Toast.LENGTH_SHORT).show();
             return null;
         }
         else {
+            System.out.println(amt1);
+            System.out.println(amt2);
             return list_users;
         }
     }
