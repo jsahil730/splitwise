@@ -73,7 +73,6 @@ public class GetStakesTransaction extends AppCompatActivity {
                             l.add(u);
                         }
                     }
-                    //Apply transaction function
                     Calendar today = Calendar.getInstance();
 
                     TransactionRecord transactionRecord= new TransactionRecord(l, desc, amt,tag_tr,today.getTime());

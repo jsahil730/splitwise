@@ -7,15 +7,6 @@
     android:orientation="vertical"
     tools:context=".add_friend_or_group.CreateGroup">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar"-->
-<!--        android:layout_width="409dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="?attr/colorPrimary"-->
-<!--        android:minHeight="?attr/actionBarSize"-->
-<!--        android:theme="@style/ThemeOverlay.AppCompat.Dark">-->
-<!--    </androidx.appcompat.widget.Toolbar>-->
-
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
