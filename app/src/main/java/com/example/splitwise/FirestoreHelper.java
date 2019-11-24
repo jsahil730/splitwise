@@ -327,18 +327,33 @@ public class FirestoreHelper {
                     .add(transacDoc)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
-                        public void onSuccess(DocumentReference documentReference) {
+                        public void onSuccess(final DocumentReference documentReference) {
                             String transactionID=documentReference.getId();
 
                             for(int j=0; j < userTransacts.size() ; j++)
                             {
-                                String tempuserID= userTransacts.get(j).getUserID();
-
+                                final String tempuserID= userTransacts.get(j).getUserID();
+                                final int j2=j;
                                 final DocumentReference transaction= userColRef.document(tempuserID)
                                         .collection(res.getString(R.string.nonGroupTransactionCollection))
                                         .document(record.getTag())
                                         .collection(res.getString(R.string.TransactionItems))
                                         .document(transactionID);
+
+                                userColRef.document(tempuserID).get()
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                AmountTypeDoc old_doc = documentSnapshot.toObject(AmountTypeDoc.class);
+                                                userColRef.document(tempuserID).update("amount",old_doc.getAmount()+
+                                                        solution.get(j2).first.getAmount());
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.i("non_group user", e.getMessage());
+                                    }
+                                });
 
                                 transaction.set(transacDoc)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -353,6 +368,7 @@ public class FirestoreHelper {
                                                     final int i2=i;
                                                     final AmountTypeDoc amountTypeDoc= new AmountTypeDoc(solution.get(i).first.getName(),
                                                             solution.get(i).first.getAmount());
+
                                                     DocumentReference depth_one= allExchanges.document(solution.get(i).first.getId());
                                                     final CollectionReference userSpecific= depth_one.collection(res.getString(R.string.userSpecificExchanges));
 
