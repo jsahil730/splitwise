@@ -62,7 +62,7 @@ public class PlaceholderFragment extends Fragment {
 
         list_items = new ArrayList<>();
 
-        adapter = new RVAdapter(false,getActivity(),list_items);
+        adapter = new RVAdapter(false,getActivity(),list_items,index);
         recyclerView.setAdapter(adapter);
 
         return root;
