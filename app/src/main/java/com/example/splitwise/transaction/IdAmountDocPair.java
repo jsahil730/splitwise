@@ -15,6 +15,11 @@ public class IdAmountDocPair {
         this.amountTypeDoc=amountTypeDoc;
     }
 
+    public IdAmountDocPair(String id, String name, double amount) {
+        this.id = id;
+        amountTypeDoc = new AmountTypeDoc(name,amount);
+    }
+
     public String getId() {
         return id;
     }

@@ -97,7 +97,6 @@ public class FriendRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imageView = itemView.findViewById(R.id.imageView);
             imageView.setVisibility(View.GONE);
         }
-
     }
 
     @Override

@@ -11,6 +11,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".friend_ui.FriendOpen"></activity>
+        <activity
+            android:name=".group_ui.TransactionsList"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".group_ui.GroupOpen"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar" />
         <activity
             android:name=".transaction.GetStakesTransaction"
             android:screenOrientation="portrait"
