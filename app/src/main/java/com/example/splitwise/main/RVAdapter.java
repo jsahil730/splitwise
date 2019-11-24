@@ -30,7 +30,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<IdAmountDocPair> list_items;
     private int index;
 
-  public  RVAdapter(boolean activity_tab, Context context, List<IdAmountDocPair> list_items, int index) {
+    public RVAdapter(boolean activity_tab, Context context, List<IdAmountDocPair> list_items, int ind
         this.activity_tab = activity_tab;
         this.context = context;
         this.list_items = list_items;
@@ -39,7 +39,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        if (!activity_tab) {
+        if (!activity_tab && index != 4) {
             if (position == 0) {
                 return Header;
             }
@@ -68,6 +68,16 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (viewType == Normal) {
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_activity_card,parent,false);
                 return new ActivityViewHolder(v);
+            }
+            else {
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_footer,parent,false);
+                return new FooterViewHolder(v);
+            }
+        }
+        else if (index == 4) {
+            if (viewType == Normal) {
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_expense_card, parent, false);
+                return new ExpenseViewHolder(v);
             }
             else {
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_footer,parent,false);
@@ -131,7 +141,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         @Override
                         public void onClick(View v) {
                             Intent intent;
-                            if (index == 2) {
+                            if (index == 2 || index == 4) {
                                 intent = new Intent(context,GroupOpen.class);
                             }
                             else {
@@ -174,12 +184,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        if (activity_tab) {
-            return (list_items.size()+1);
-        }
-        else {
-            return (list_items.size()+1);
-        }
+        return list_items.size()+1;
     }
 
     public class ActivityViewHolder extends RecyclerView.ViewHolder {

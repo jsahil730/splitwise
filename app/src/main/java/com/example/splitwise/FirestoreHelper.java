@@ -35,6 +35,8 @@ public class FirestoreHelper {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference userColRef;
     private AmountTypeDoc userDoc;
+
+
     public DocumentReference getUserRef() {
         return userRef;
     }
@@ -64,6 +66,10 @@ public class FirestoreHelper {
     private Resources res;
     private Context context;
 
+
+    public CollectionReference getGroupsRef() {
+        return groupsRef;
+    }
 
     private CollectionReference groupsRef;
 
