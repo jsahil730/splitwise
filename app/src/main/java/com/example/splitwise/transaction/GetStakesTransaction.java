@@ -1,16 +1,18 @@
 package com.example.splitwise.transaction;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Switch;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.splitwise.FirestoreHelper;
 import com.example.splitwise.MainActivity;
 import com.example.splitwise.R;
@@ -29,12 +31,14 @@ public class GetStakesTransaction extends AppCompatActivity {
     String desc;
     String tag_tr;
     ArrayList<UserTransact> list_trans;
+    TextView totalAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_stakes);
 
+        totalAmount= findViewById(R.id.total_amount);
         Bundle bundle = getIntent().getExtras();
         amt = Objects.requireNonNull(bundle).getDouble(getString(R.string.key_transac_amt));
         desc = bundle.getString(getString(R.string.key_transac_desc));
@@ -51,6 +55,7 @@ public class GetStakesTransaction extends AppCompatActivity {
         adapter = new StakeRVAdapter(list_trans,this,null,equal_split,amt);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        totalAmount.setText(amt.toString());
     }
 
     @Override

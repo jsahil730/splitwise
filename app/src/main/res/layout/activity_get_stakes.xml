@@ -21,6 +21,16 @@
         android:text="@string/equal_split"
         android:textSize="17sp" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/total_amount"
+        android:text="Amount"
+        android:textSize="20sp"
+        android:padding="10sp"
+        android:textAlignment="center"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/users_stake_list"
         android:layout_width="match_parent"
