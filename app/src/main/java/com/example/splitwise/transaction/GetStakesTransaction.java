@@ -1,5 +1,6 @@
 package com.example.splitwise.transaction;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -33,6 +34,7 @@ public class GetStakesTransaction extends AppCompatActivity {
     ArrayList<UserTransact> list_trans;
     TextView totalAmount;
 
+    @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +57,7 @@ public class GetStakesTransaction extends AppCompatActivity {
         adapter = new StakeRVAdapter(list_trans,this,null,equal_split,amt);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-        totalAmount.setText(amt.toString());
+        totalAmount.setText(String.format("Total Amount : %.2f",amt));
     }
 
     @Override
