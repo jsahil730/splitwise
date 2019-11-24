@@ -65,10 +65,7 @@ public class GetStakesTransaction extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.finish_transaction:
                 ArrayList<UserTransact> list = adapter.getList_users();
-                if (list == null) {
-                    Toast.makeText(this, "Re-enter amounts", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                if (list != null) {
                     list_trans = list;
                     //Apply transaction function
                     Intent intent = new Intent(this, MainActivity.class);
