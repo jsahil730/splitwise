@@ -56,6 +56,8 @@ public class FriendOpen extends AppCompatActivity {
             s = String.format("You are owed %.2f",amount);
         }
         return s;
+
+
     }
 
     @Override
@@ -72,7 +74,9 @@ public class FriendOpen extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new RVAdapter(false, this, commonGroups, 2);
+        adapter = new RVAdapter(false, this, commonGroups, 4);
+
+        recyclerView.setAdapter(adapter);
 
 
     }
