@@ -960,7 +960,7 @@ public class FirestoreHelper {
                                                                     solution.add(Pair.create(friendsDoc2, friendsList));
                                                                             Calendar today = Calendar.getInstance();
                                                                            today.set(Calendar.HOUR_OF_DAY, 0);
-                                                                    processSolutionForGroup(solution,group.getId(),Math.abs(myDoc2.getAmount()),today.getTime(),false);
+                                                                    processSolutionForGroup(solution,group.getId(),Math.abs(myDoc2.getAmount()),date,false);
 
                                                                 }
                                                             }
@@ -1033,8 +1033,8 @@ public class FirestoreHelper {
 
                         Calendar today = Calendar.getInstance();
                         today.set(Calendar.HOUR_OF_DAY, 0);
-                        TransacDoc non_group_doc1 = new TransacDoc(null,"Non group settle up",Math.abs(non_groupAmount),"others",today.getTime());
-                        final TransacDoc non_group_doc2 = new TransacDoc(null,"Non group settle up",Math.abs(non_groupAmount),"others",today.getTime());
+                        TransacDoc non_group_doc1 = new TransacDoc(null,"Non group settle up",Math.abs(non_groupAmount),"others",date);
+                        final TransacDoc non_group_doc2 = new TransacDoc(null,"Non group settle up",Math.abs(non_groupAmount),"others",date);
                         userRef.collection(res.getString(R.string.nonGroupTransactionCollection))
                                 .document("others")
                                 .collection(res.getString(R.string.TransactionItems))
