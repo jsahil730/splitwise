@@ -318,6 +318,8 @@ public class FirestoreHelper {
 
         final List<Pair<IdAmountDocPair, List< IdAmountDocPair> >> solution= findSolution(userTransacts);
 
+        addActivities(solution, record.getGroupID(), record.getTag(), record.getDescription(), record.getDate());
+
         if(record.getGroupID()==null){
             String first_user= userTransacts.get(0).getUserID();
             userColRef.document(first_user)
@@ -635,9 +637,11 @@ public class FirestoreHelper {
     {
         CollectionReference collectionReference= groupsRef.document(GroupId)
                 .collection(res.getString(R.string.groupTransactionCollection))
-                .document("others")
+                .document("General")
                 .collection(res.getString(R.string.TransactionItems));
-        final TransacDoc transacDoc = new TransacDoc(GroupId,"Settle Up Transaction",total_amount,"others",date);
+        final TransacDoc transacDoc = new TransacDoc(GroupId,"Settle Up Transaction",total_amount,"General",date);
+
+        addActivities(solution, GroupId, "General", "Settle Up Transaction", date);
 
         collectionReference.add(transacDoc)    //adding transaction to the groups group transaction collection
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -1011,9 +1015,9 @@ public class FirestoreHelper {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        TwoAmountDoc temp = documentSnapshot.toObject(TwoAmountDoc.class);
+                        final TwoAmountDoc temp = documentSnapshot.toObject(TwoAmountDoc.class);
                         final double total_amount = temp.getAmount();
-                        double non_groupAmount = temp.getSec_amount();
+                        final double non_groupAmount = temp.getSec_amount();
                         friendUser.update("amount",0);
                         friendUser.update("sec_amount",0);
                         userRef.get()
@@ -1050,10 +1054,36 @@ public class FirestoreHelper {
 
                         Calendar today = Calendar.getInstance();
                         today.set(Calendar.HOUR_OF_DAY, 0);
-                        TransacDoc non_group_doc1 = new TransacDoc(null,"Non group settle up",Math.abs(non_groupAmount),"others",date);
-                        final TransacDoc non_group_doc2 = new TransacDoc(null,"Non group settle up",Math.abs(non_groupAmount),"others",date);
+                        TransacDoc non_group_doc1 = new TransacDoc(null,"Non group settle up",Math.abs(non_groupAmount),"General",date);
+                        final TransacDoc non_group_doc2 = new TransacDoc(null,"Non group settle up",Math.abs(non_groupAmount),"General",date);
+
+                        userRef.get()
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        List<Pair<IdAmountDocPair, List<IdAmountDocPair>>> solution= new ArrayList<>();
+                                        IdAmountDocPair friend1= new IdAmountDocPair(friendsId, new AmountTypeDoc(temp.getName(), non_groupAmount));
+                                        IdAmountDocPair me1 = new IdAmountDocPair(userId, new AmountTypeDoc(documentSnapshot.toObject(AmountTypeDoc.class).getName(),non_groupAmount));
+
+                                        IdAmountDocPair friend2= new IdAmountDocPair(friend1.getId(), new AmountTypeDoc(friend1.getName(),-1*friend1.getAmount()));
+                                        IdAmountDocPair me2= new IdAmountDocPair(me1.getId(), new AmountTypeDoc(me1.getName(), -1*me1.getAmount()));
+
+                                        List<IdAmountDocPair> myList= new ArrayList<>();
+                                        myList.add(friend2);
+
+                                        List<IdAmountDocPair> friendsList= new ArrayList<>();
+                                        friendsList.add(me1);
+
+                                        solution.add(Pair.create(me2, myList));
+                                        solution.add(Pair.create(friend1, friendsList));
+
+                                        addActivities(solution, null, "General", "Non Group Settle Up", date);
+                                    }
+                                });
+
+
                         userRef.collection(res.getString(R.string.nonGroupTransactionCollection))
-                                .document("others")
+                                .document("General")
                                 .collection(res.getString(R.string.TransactionItems))
                                 .add(non_group_doc1)
                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -1061,7 +1091,7 @@ public class FirestoreHelper {
                                     public void onSuccess(DocumentReference documentReference) {
                                         String transacId = documentReference.getId();
                                         friend_user_depth_one.collection(res.getString(R.string.nonGroupTransactionCollection))
-                                                .document("others")
+                                                .document("General")
                                                 .collection(res.getString(R.string.TransactionItems))
                                                 .document(transacId).set(non_group_doc2);
                                     }
@@ -1145,7 +1175,8 @@ public class FirestoreHelper {
                             }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.i("leave error", e.getMessage());
+
+        Log.i("leave error", e.getMessage());
                         }
                     });
 
@@ -1158,5 +1189,22 @@ public class FirestoreHelper {
             }
         });
     }
+
+    public void addActivities(List<Pair<IdAmountDocPair,List<IdAmountDocPair>>> solution, String groupId, String tag, String description, Date date)
+    {
+        for(Pair<IdAmountDocPair, List<IdAmountDocPair>> user1 : solution)
+        {
+            IdAmountDocPair targetUser= user1.first;
+
+            String targetId= targetUser.getId();
+
+            ActivityTypeDoc activity= new ActivityTypeDoc(groupId, description, targetUser.getAmount(), tag, date);
+
+            userColRef.document(targetId).collection(res.getString(R.string.Activities))
+                    .add(activity);
+
+        }
+    }
+
 
 }
