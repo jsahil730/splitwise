@@ -1,5 +1,9 @@
-package com.example.splitwise.ui.add;
-
+package com.example.splitwise.add_friend_or_group;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,12 +13,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.splitwise.FirestoreHelper;
 import com.example.splitwise.IdTypeDoc;
@@ -46,10 +44,8 @@ public class CreateGroup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
 
-        toolbar = findViewById(R.id.toolbar);
         firestoreHelper = new FirestoreHelper(this);
 
-        toolbar.setTitle("Create Group");
 
         group_name = findViewById(R.id.group_name_edit);
         add_people = findViewById(R.id.add_people_group);
@@ -59,8 +55,6 @@ public class CreateGroup extends AppCompatActivity {
         recyclerView = findViewById(R.id.users_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
-        final FirestoreHelper firestoreHelper = new FirestoreHelper(this);
 
         add_people.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,7 +136,7 @@ public class CreateGroup extends AppCompatActivity {
                     Intent intent = new Intent(CreateGroup.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-                    Toast.makeText(CreateGroup.this, "Group created successfully!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CreateGroup.this, "Group created successfully!", Toast.LENGTH_SHORT).show();
                     startActivity(intent);
                     finish();
                 }

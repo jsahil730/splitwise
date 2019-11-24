@@ -16,14 +16,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.splitwise.login_or_signup.SignupPage;
-import com.example.splitwise.ui.add.AddFriend;
-import com.example.splitwise.ui.add.CreateGroup;
-import com.example.splitwise.ui.add.User;
-import com.example.splitwise.ui.main.SectionsPagerAdapter;
+import com.example.splitwise.add_friend_or_group.AddFriend;
+import com.example.splitwise.add_friend_or_group.CreateGroup;
+import com.example.splitwise.add_friend_or_group.User;
+import com.example.splitwise.main.SectionsPagerAdapter;
+import com.example.splitwise.transaction.AddTransaction;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -64,8 +64,31 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                final String uid = firestoreHelper.getUserId();
+                firestoreHelper.getUserRef().get().addOnSuccessListener(MainActivity.this, new OnSuccessListener<DocumentSnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String uname = Objects.requireNonNull(documentSnapshot.toObject(IdTypeDoc.class)).getName();
+
+                        Intent intent = new Intent(MainActivity.this, AddTransaction.class);
+
+                        Bundle bundle = new Bundle();
+                        ArrayList<User> userref = new ArrayList<>();
+                        userref.add(new User(uid,uname));
+                        bundle.putParcelableArrayList(getString(R.string.key_users_selection),userref);
+                        intent.putExtras(bundle);
+
+                        startActivity(intent);
+                    }
+                })
+                        .addOnFailureListener(MainActivity.this, new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        })
+                ;
             }
         });
 
@@ -116,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent3);
                 return true;
             case R.id.create_group:
-                FirestoreHelper firestoreHelper = new FirestoreHelper(this);
                 final String uid = firestoreHelper.getUserId();
                 firestoreHelper.getUserRef().get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
                     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -161,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    userDoc = documentSnapshot.toObject(AmountTypeDoc.class);
+                    userDoc = Objects.requireNonNull(documentSnapshot).toObject(AmountTypeDoc.class);
                 }
             }
         });
