@@ -15,15 +15,17 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.splitwise.login_or_signup.SignupPage;
 import com.example.splitwise.add_friend_or_group.AddFriend;
 import com.example.splitwise.add_friend_or_group.CreateGroup;
 import com.example.splitwise.add_friend_or_group.User;
+import com.example.splitwise.login_or_signup.SignupPage;
 import com.example.splitwise.main.SectionsPagerAdapter;
-import com.example.splitwise.transaction.AddTransaction;
+import com.example.splitwise.transaction.TransactionRecord;
+import com.example.splitwise.transaction.UserTransact;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,6 +35,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
@@ -64,42 +68,24 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String uid = firestoreHelper.getUserId();
-                firestoreHelper.getUserRef().get().addOnSuccessListener(MainActivity.this, new OnSuccessListener<DocumentSnapshot>() {
-                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        String uname = Objects.requireNonNull(documentSnapshot.toObject(IdTypeDoc.class)).getName();
-
-                        Intent intent = new Intent(MainActivity.this, AddTransaction.class);
-
-                        Bundle bundle = new Bundle();
-                        ArrayList<User> userref = new ArrayList<>();
-                        userref.add(new User(uid,uname));
-                        bundle.putParcelableArrayList(getString(R.string.key_users_selection),userref);
-                        intent.putExtras(bundle);
-
-                        startActivity(intent);
-                    }
-                })
-                        .addOnFailureListener(MainActivity.this, new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        })
-                ;
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
 
-//     UserTransact u1 = new UserTransact("anubhav@splitwise.clone","anubhav",40,50);
-//     UserTransact u2 = new UserTransact("atulya@splitwise.clone","atulya",30,20);
-//        UserTransact u3 = new UserTransact("sahil@splitwise.clone","sahil",90,50);
-//        List<UserTransact> l1 = new ArrayList<>();
-//        l1.add(u1);l1.add(u2);//l1.add(u3);
-//        Calendar today = Calendar.getInstance();
-//        today.set(Calendar.HOUR_OF_DAY, 0);
-//       TransactionRecord record = new TransactionRecord(null,l1,"checking",70,"food",today.getTime());
+        UserTransact u1 = new UserTransact("anubhav@splitwise.clone","anubhav",50,40);
+        UserTransact u2 = new UserTransact("atulya@splitwise.clone","atulya",10,20);
+        UserTransact u3 = new UserTransact("sahil@splitwise.clone","sahil",90,70);
+        UserTransact b1 = new UserTransact("anubhav@splitwise.clone","anubhav",60,50);
+        UserTransact b2 = new UserTransact("atulya@splitwise.clone","atulya",10,20);
+        UserTransact b3 = new UserTransact("sahil@splitwise.clone","sahil",70,70);
+        List<UserTransact> l1 = new ArrayList<>();
+        List<UserTransact> l2 = new ArrayList<>();
+        l2.add(b1);l2.add(b2);l2.add(b3);
+        l1.add(u1);l1.add(u2);//l1.add(u3);
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        TransactionRecord record = new TransactionRecord(null,l1,"checking",60,"food",today.getTime());
 //        firestoreHelper.processTransaction(record);
 //        firestoreHelper.processTransaction(record);
 //        List<String> to_settle = new ArrayList<>();
@@ -110,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        firestoreHelper.settleGroup("Sjernv5Nks3FAGhF0AKQ",to_settle,today.getTime());
 //        firestoreHelper.settle_non_group("atulya@splitwise.clone",today.getTime());
-
+//        firestoreHelper.leave_group("BshjvAspmAhhrC6CaNQN",today.getTime());
     }
 
     @Override
@@ -139,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent3);
                 return true;
             case R.id.create_group:
+                FirestoreHelper firestoreHelper = new FirestoreHelper(this);
                 final String uid = firestoreHelper.getUserId();
                 firestoreHelper.getUserRef().get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
                     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -183,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    userDoc = Objects.requireNonNull(documentSnapshot).toObject(AmountTypeDoc.class);
+                    userDoc = documentSnapshot.toObject(AmountTypeDoc.class);
                 }
             }
         });

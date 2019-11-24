@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.splitwise.AmountTypeDoc;
 import com.example.splitwise.FirestoreHelper;
+import com.example.splitwise.IdTypeDoc;
 import com.example.splitwise.R;
 import com.example.splitwise.TwoAmountDoc;
+import com.example.splitwise.transaction.IdAmountDocPair;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -36,7 +38,7 @@ public class PlaceholderFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private List<AmountTypeDoc> list_items;
+    private List<IdAmountDocPair> list_items;
     private int index;
     private FirestoreHelper firestoreHelper;
 
@@ -101,14 +103,18 @@ public class PlaceholderFragment extends Fragment {
                             }
                         }
                         AmountTypeDoc myself = new AmountTypeDoc("User",total_balance);
-                        list_items.add(myself);
+                        IdAmountDocPair to_myself = new IdAmountDocPair(firestoreHelper.getUserId(),myself);
+                        list_items.add(to_myself);
                         for (DocumentSnapshot documentSnapshot2 : Objects.requireNonNull(queryDocumentSnapshots)) {
                             if(index==2){AmountTypeDoc temp = documentSnapshot2.toObject(AmountTypeDoc.class);
-                            list_items.add(temp);}
+                                IdAmountDocPair t1 = new IdAmountDocPair(documentSnapshot2.getId(),temp);
+                            list_items.add(t1);}
                             else{
                                 TwoAmountDoc temp  = documentSnapshot2.toObject(TwoAmountDoc.class);
+
                                 AmountTypeDoc temp2 = new AmountTypeDoc(temp.getName(),temp.getAmount());
-                                list_items.add(temp2);
+                                IdAmountDocPair t1 = new IdAmountDocPair(documentSnapshot2.getId(),temp2);
+                                list_items.add(t1);
                             }
                         }
                         adapter.notifyDataSetChanged();
