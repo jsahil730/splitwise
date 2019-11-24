@@ -45,4 +45,12 @@
     <string name="key_transac_tag">transaction_tag</string>
     <string name="equal_split">Split Equally</string>
     <string name="amount_string">0.00</string>
+    <string name="settle_button">Settle Up</string>
+    <string name="balances">Balances</string>
+    <string name="leave_group">Leave Group</string>
+    <string name="key_tag">Tag</string>
+    <string name="key_group_id">group_id</string>
+    <string name="key_group_name">group_name</string>
+    <string name="key_group_amount">group_amount</string>
+    <string name="owed_amount">Amount Owed</string>
 </resources>

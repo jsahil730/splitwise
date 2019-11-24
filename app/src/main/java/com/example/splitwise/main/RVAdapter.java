@@ -2,6 +2,8 @@ package com.example.splitwise.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.splitwise.AmountTypeDoc;
 import com.example.splitwise.R;
+import com.example.splitwise.friend_ui.FriendOpen;
+import com.example.splitwise.group_ui.GroupOpen;
+import com.example.splitwise.transaction.IdAmountDocPair;
 
 import java.util.List;
 
@@ -23,12 +28,14 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private boolean activity_tab;
     private Context context;
-    private List<AmountTypeDoc> list_items;
+    private List<IdAmountDocPair> list_items;
+    private int index;
 
-    RVAdapter(boolean activity_tab, Context context, List<AmountTypeDoc> list_items) {
+    RVAdapter(boolean activity_tab, Context context, List<IdAmountDocPair> list_items, int index) {
         this.activity_tab = activity_tab;
         this.context = context;
         this.list_items = list_items;
+        this.index = index;
     }
 
     @Override
@@ -109,9 +116,31 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     }
                     break;
                 case Normal:
-                    AmountTypeDoc pair = list_items.get(position);
-                    ((ExpenseViewHolder) holder).name.setText(pair.getName());
-                    ((ExpenseViewHolder) holder).amount.setText(getText(pair.getAmount()));
+                    final IdAmountDocPair pair = list_items.get(position);
+                    ExpenseViewHolder Holder = (ExpenseViewHolder) holder;
+                    Holder.name.setText(pair.getName());
+                    Holder.amount.setText(getText(pair.getAmount()));
+
+                    Holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent;
+                            if (index == 2) {
+                                intent = new Intent(context,GroupOpen.class);
+                            }
+                            else {
+                                intent = new Intent(context, FriendOpen.class);
+                            }
+                            Bundle bundle = new Bundle();
+                            bundle.putString(context.getResources().getString(R.string.key_group_id),pair.getId());
+                            bundle.putString(context.getResources().getString(R.string.key_group_name),pair.getName());
+                            bundle.putDouble(context.getResources().getString(R.string.key_group_amount),pair.getAmount());
+                            intent.putExtras(bundle);
+                            context.startActivity(intent);
+                        }
+                    });
+
+
                     break;
                 case Footer:
                     break;

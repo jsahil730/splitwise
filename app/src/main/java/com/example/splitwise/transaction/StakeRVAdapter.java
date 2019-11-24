@@ -83,7 +83,7 @@ public class StakeRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return new StakeViewHolder(v);
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final StakeViewHolder stakeViewHolder = (StakeViewHolder) holder;
@@ -135,7 +135,7 @@ public class StakeRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         });
 
         if (equal_sp) {
-            stakeViewHolder.stake_amount.setText(convert_two_places(total_amount/getItemCount()).toString());
+            stakeViewHolder.stake_amount.setText(String.format("%.2f",convert_two_places(total_amount/getItemCount())));
         }
     }
 
