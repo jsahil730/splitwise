@@ -23,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -134,7 +135,7 @@ public class FirestoreHelper {
 
                                                                 if (documentSnapshot.exists()) {
                                                                     AmountTypeDoc friend_to_be_added = documentSnapshot.toObject(AmountTypeDoc.class);
-                                                                    AmountTypeDoc friendDoc = new AmountTypeDoc(Objects.requireNonNull(friend_to_be_added).getName(), 0);
+                                                                    TwoAmountDoc friendDoc = new TwoAmountDoc(Objects.requireNonNull(friend_to_be_added).getName(), 0,0);
 
                                                                     main_friends.document(to_be_added).set(friendDoc);
 
@@ -558,7 +559,19 @@ public class FirestoreHelper {
 
                 final IdAmountDocPair personB = personB2;
                 String personBid= personB.getId();
-                final AmountTypeDoc friendsDoc= new AmountTypeDoc(personB.getName(), personB.getAmount());
+
+                TwoAmountDoc friendsDoc2;
+
+                if(record.getGroupID()==null)
+                {
+                    friendsDoc2 = new TwoAmountDoc(personB.getName(), personB.getAmount(), personB.getAmount());
+                }
+                else
+                {
+                    friendsDoc2 = new TwoAmountDoc(personB.getName(), personB.getAmount(), 0);
+                }
+
+                final TwoAmountDoc friendsDoc= friendsDoc2;
 
                 final DocumentReference friendsDocRef= userColRef.document(personAid)
                         .collection(res.getString(R.string.FriendsCollection))
@@ -574,7 +587,10 @@ public class FirestoreHelper {
                                 else
                                 {
                                     friendsDocRef.update("amount",
-                                            (Objects.requireNonNull(documentSnapshot.toObject(AmountTypeDoc.class)).getAmount()+personB.getAmount()));
+                                            (Objects.requireNonNull(documentSnapshot.toObject(TwoAmountDoc.class)).getAmount()+friendsDoc.getAmount()));
+
+                                    friendsDocRef.update("sec_amount",
+                                            (Objects.requireNonNull(documentSnapshot.toObject(TwoAmountDoc.class)).getSec_amount()+friendsDoc.getSec_amount()));
                                 }
 
                             }
@@ -599,7 +615,7 @@ public class FirestoreHelper {
         }
     }
 
-    public void processSolutionForGroup(final List<Pair<IdAmountDocPair, List< IdAmountDocPair> >> solution, String GroupId, double total_amount, Date date)
+    public void processSolutionForGroup(final List<Pair<IdAmountDocPair, List< IdAmountDocPair> >> solution, String GroupId, double total_amount, Date date,Boolean toggle)
     {
         CollectionReference collectionReference= groupsRef.document(GroupId)
                 .collection(res.getString(R.string.groupTransactionCollection))
@@ -762,44 +778,53 @@ public class FirestoreHelper {
                     });
         }
 
-        List< HashMap<String, IdAmountDocPair>> solutionHash= new ArrayList<>();
+        if(toggle) {
+            List<HashMap<String, IdAmountDocPair>> solutionHash = new ArrayList<>();
 
-        for(int i=0 ; i< solution.size() ; i++)   //Updated amounts awed/bowrrowed in friendlists of users
-        {
-            IdAmountDocPair personA= solution.get(i).first;
-            String personAid= personA.getId();
-            solutionHash.add(new HashMap<String, IdAmountDocPair>());
-
-            for( IdAmountDocPair personB2 : solution.get(i).second)
+            for (int i = 0; i < solution.size(); i++)   //Updated amounts awed/bowrrowed in friendlists of users
             {
-                solutionHash.get(i).put(personB2.getId(), personB2);
+                IdAmountDocPair personA = solution.get(i).first;
+                String personAid = personA.getId();
+                solutionHash.add(new HashMap<String, IdAmountDocPair>());
 
-                final IdAmountDocPair personB = personB2;
-                String personBid= personB.getId();
-                final AmountTypeDoc friendsDoc= new AmountTypeDoc(personB.getName(), personB.getAmount());
+                for (IdAmountDocPair personB2 : solution.get(i).second) {
+                    solutionHash.get(i).put(personB2.getId(), personB2);
 
-                final DocumentReference friendsDocRef= userColRef.document(personAid)
-                        .collection(res.getString(R.string.FriendsCollection))
-                        .document(personBid);
-                friendsDocRef.get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if(!documentSnapshot.exists())
-                                {
-                                    friendsDocRef.set(friendsDoc);
+                    final IdAmountDocPair personB = personB2;
+                    String personBid = personB.getId();
+
+                    TwoAmountDoc friendsDoc2;
+
+                    if (GroupId == null) {
+                        friendsDoc2 = new TwoAmountDoc(personB.getName(), personB.getAmount(), personB.getAmount());
+                    } else {
+                        friendsDoc2 = new TwoAmountDoc(personB.getName(), personB.getAmount(), 0);
+                    }
+
+                    final TwoAmountDoc friendsDoc = friendsDoc2;
+
+                    final DocumentReference friendsDocRef = userColRef.document(personAid)
+                            .collection(res.getString(R.string.FriendsCollection))
+                            .document(personBid);
+                    friendsDocRef.get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if (!documentSnapshot.exists()) {
+                                        friendsDocRef.set(friendsDoc);
+                                    } else {
+                                        friendsDocRef.update("amount",
+                                                (Objects.requireNonNull(documentSnapshot.toObject(TwoAmountDoc.class)).getAmount() + friendsDoc.getAmount()));
+
+                                        friendsDocRef.update("sec_amount",
+                                                (Objects.requireNonNull(documentSnapshot.toObject(TwoAmountDoc.class)).getSec_amount() + friendsDoc.getSec_amount()));
+                                    }
+
                                 }
-                                else
-                                {
-                                    friendsDocRef.update("amount",
-                                            (Objects.requireNonNull(documentSnapshot.toObject(AmountTypeDoc.class)).getAmount()+personB.getAmount()));
-                                }
-
-                            }
-                        });
+                            });
+                }
             }
         }
-
     }
 
 
@@ -850,7 +875,7 @@ public class FirestoreHelper {
                         IdAmountDocPair myDocPair= new IdAmountDocPair(userId, new AmountTypeDoc(myName, myAmount));
                         solution.add(Pair.create(myDocPair, myBorrowers));
 
-                        processSolutionForGroup(solution,groupId,myAmount,date);
+                        processSolutionForGroup(solution,groupId,myAmount,date,true);
 
                     }
                 })
@@ -867,7 +892,176 @@ public class FirestoreHelper {
 
     }
 
+    public void settle_non_group(final String friendsId, final Date date)
+    {
+        CollectionReference myGroupList= userRef.collection(res.getString(R.string.user_groups));
 
+        myGroupList.get()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("", e.getMessage());
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        for(DocumentSnapshot group2 : queryDocumentSnapshots)
+                        {
+
+                            final DocumentSnapshot group= group2;
+                            final DocumentReference friendsGroupUserRef= groupsRef.document(group.getId())
+                                    .collection(res.getString(R.string.GroupUsers)).document(friendsId);
+
+                            friendsGroupUserRef.get()
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                            if(documentSnapshot.exists())
+                                            {
+                                                final DocumentSnapshot documentSnapshot1= documentSnapshot;
+                                                final AmountTypeDoc friendsAmountDoc= documentSnapshot.toObject(AmountTypeDoc.class);
+                                                DocumentReference myRef= friendsGroupUserRef.collection(res.getString(R.string.borrowersCollection))
+                                                        .document(userId);
+
+                                                myRef.get()
+                                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                if(documentSnapshot.exists())
+                                                                {
+                                                                    List<Pair<IdAmountDocPair, List<IdAmountDocPair >>> solution= new ArrayList<>();
+
+                                                                    AmountTypeDoc myAmountDoc= documentSnapshot.toObject(AmountTypeDoc.class);
+                                                                    AmountTypeDoc myAmountDoc2= documentSnapshot.toObject(AmountTypeDoc.class);
+
+                                                                    IdAmountDocPair myDoc= new IdAmountDocPair(documentSnapshot.getId(), myAmountDoc);
+                                                                    List<IdAmountDocPair> myList= new ArrayList<>();
+
+
+                                                                    AmountTypeDoc friendsAmountDoc2= new AmountTypeDoc(friendsAmountDoc.getName(), myAmountDoc.getAmount());
+                                                                    IdAmountDocPair friendsDoc= new IdAmountDocPair(documentSnapshot1.getId(), friendsAmountDoc2);
+
+                                                                    myList.add(friendsDoc);
+
+                                                                    AmountTypeDoc friendsAmountDoc3= new AmountTypeDoc(friendsAmountDoc.getName(), myAmountDoc.getAmount());
+
+                                                                    IdAmountDocPair myDoc2= new IdAmountDocPair(documentSnapshot.getId(), myAmountDoc2);
+                                                                    myDoc2.setAmount(-1*myDoc2.getAmount());
+
+                                                                    IdAmountDocPair friendsDoc2= new IdAmountDocPair(documentSnapshot1.getId(), friendsAmountDoc3);
+                                                                    friendsDoc2.setAmount(-1*friendsDoc2.getAmount());
+                                                                    List<IdAmountDocPair> friendsList= new ArrayList<>();
+                                                                    friendsList.add(myDoc2);
+
+                                                                    solution.add(Pair.create(myDoc, myList));
+                                                                    solution.add(Pair.create(friendsDoc2, friendsList));
+                                                                            Calendar today = Calendar.getInstance();
+                                                                           today.set(Calendar.HOUR_OF_DAY, 0);
+                                                                    processSolutionForGroup(solution,group.getId(),Math.abs(myDoc2.getAmount()),today.getTime(),false);
+
+                                                                }
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Log.i("", e.getMessage());
+                                                            }
+                                                        });
+                                            }
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.i("", e.getMessage());
+                                        }
+                                    });
+
+
+
+
+                        }
+                    }
+                });
+
+        final DocumentReference friendUser = userRef.collection(res.getString(R.string.FriendsCollection)).document(friendsId);
+
+        friendUser.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        TwoAmountDoc temp = documentSnapshot.toObject(TwoAmountDoc.class);
+                        final double total_amount = temp.getAmount();
+                        double non_groupAmount = temp.getSec_amount();
+                        friendUser.update("amount",0);
+                        friendUser.update("sec_amount",0);
+                        userRef.get()
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        double new_amount = documentSnapshot.toObject(AmountTypeDoc.class).getAmount()-total_amount;
+                                        userRef.update("amount",new_amount);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.i("non_group", e.getMessage());
+                            }
+                                });
+                        final DocumentReference friend_user_depth_one = userColRef.document(friendsId);
+                        final DocumentReference me_depth_two = friend_user_depth_one.collection(res.getString(R.string.FriendsCollection)).document(userId);
+                        me_depth_two.update("amount",0);
+                        me_depth_two.update("sec_amount",0);
+                        friend_user_depth_one.get()
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        AmountTypeDoc temp2 = documentSnapshot.toObject(AmountTypeDoc.class);
+                                        friend_user_depth_one.update("amount",temp2.getAmount()+total_amount);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.i("non_group", e.getMessage());
+                            }
+                        });
+
+
+                        Calendar today = Calendar.getInstance();
+                        today.set(Calendar.HOUR_OF_DAY, 0);
+                        TransacDoc non_group_doc1 = new TransacDoc(null,"Non group settle up",Math.abs(non_groupAmount),"others",today.getTime());
+                        final TransacDoc non_group_doc2 = new TransacDoc(null,"Non group settle up",Math.abs(non_groupAmount),"others",today.getTime());
+                        userRef.collection(res.getString(R.string.nonGroupTransactionCollection))
+                                .document("others")
+                                .collection(res.getString(R.string.TransactionItems))
+                                .add(non_group_doc1)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        String transacId = documentReference.getId();
+                                        friend_user_depth_one.collection(res.getString(R.string.nonGroupTransactionCollection))
+                                                .document("others")
+                                                .collection(res.getString(R.string.TransactionItems))
+                                                .document(transacId).set(non_group_doc2);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.i("non_group", e.getMessage());
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.i("non group", e.getMessage());
+            }
+        });
+    }
 
 
 

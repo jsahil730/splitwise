@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.splitwise.AmountTypeDoc;
 import com.example.splitwise.FirestoreHelper;
 import com.example.splitwise.R;
+import com.example.splitwise.TwoAmountDoc;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -92,14 +93,23 @@ public class PlaceholderFragment extends Fragment {
                         list_items.clear();
                         double total_balance=0;
                         for (DocumentSnapshot documentSnapshot2 : Objects.requireNonNull(queryDocumentSnapshots)) {
-                            AmountTypeDoc temp = documentSnapshot2.toObject(AmountTypeDoc.class);
-                            total_balance=total_balance+temp.getAmount();
+                            if(index==2){AmountTypeDoc temp = documentSnapshot2.toObject(AmountTypeDoc.class);
+                            total_balance=total_balance+temp.getAmount();}
+                            else{
+                                TwoAmountDoc temp = documentSnapshot2.toObject(TwoAmountDoc.class);
+                                total_balance=total_balance+temp.getAmount();
+                            }
                         }
                         AmountTypeDoc myself = new AmountTypeDoc("User",total_balance);
                         list_items.add(myself);
                         for (DocumentSnapshot documentSnapshot2 : Objects.requireNonNull(queryDocumentSnapshots)) {
-                            AmountTypeDoc temp = documentSnapshot2.toObject(AmountTypeDoc.class);
-                            list_items.add(temp);
+                            if(index==2){AmountTypeDoc temp = documentSnapshot2.toObject(AmountTypeDoc.class);
+                            list_items.add(temp);}
+                            else{
+                                TwoAmountDoc temp  = documentSnapshot2.toObject(TwoAmountDoc.class);
+                                AmountTypeDoc temp2 = new AmountTypeDoc(temp.getName(),temp.getAmount());
+                                list_items.add(temp2);
+                            }
                         }
                         adapter.notifyDataSetChanged();
 
