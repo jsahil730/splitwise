@@ -13,7 +13,7 @@ public class DecimalDigitsInputFilter implements InputFilter {
     private static final int DIGITS_BEFORE_ZERO_DEFAULT = 100;
     private static final int DIGITS_AFTER_ZERO_DEFAULT = 100;
 
-    DecimalDigitsInputFilter(Integer digitsBeforeZero, Integer digitsAfterZero) {
+    public DecimalDigitsInputFilter(Integer digitsBeforeZero, Integer digitsAfterZero) {
         int mDigitsBeforeZero = (digitsBeforeZero != null ? digitsBeforeZero : DIGITS_BEFORE_ZERO_DEFAULT);
         int mDigitsAfterZero = (digitsAfterZero != null ? digitsAfterZero : DIGITS_AFTER_ZERO_DEFAULT);
         mPattern = Pattern.compile("-?[0-9]{0," + (mDigitsBeforeZero) + "}+((\\.[0-9]{0," + (mDigitsAfterZero)

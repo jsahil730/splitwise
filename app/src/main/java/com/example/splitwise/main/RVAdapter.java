@@ -109,7 +109,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 case Normal:// set text for all
                     if(list_items.get(position).getId()==null)
                     {
-                        ((ActivityViewHolder) holder).transac_amount.setText("You are Not involved");
+                        ((ActivityViewHolder) holder).transac_amount.setText("You are not involved");
                     }
                     else {
                         ((ActivityViewHolder) holder).transac_amount.setText(getText(list_items.get(position).getAmount()));

@@ -7,18 +7,23 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.splitwise.AmountTypeDoc;
 import com.example.splitwise.FirestoreHelper;
+import com.example.splitwise.IdTypeDoc;
 import com.example.splitwise.R;
 import com.example.splitwise.add_friend_or_group.User;
 import com.example.splitwise.transaction.IdAmountDocPair;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -34,6 +39,8 @@ public class GroupOpen extends AppCompatActivity {
     RecyclerView recyclerView;
     TagRVAdapter adapter;
     IdAmountDocPair pair;
+    FloatingActionButton fab;
+    FirestoreHelper firestoreHelper;
 
     @SuppressLint("DefaultLocale")
     public String get_amount_string(double amount) {
@@ -66,12 +73,44 @@ public class GroupOpen extends AppCompatActivity {
         pair = new IdAmountDocPair(Objects.requireNonNull(bundle).getString(getString(R.string.key_group_id)),bundle.getString(getString(R.string.key_group_name))
                 ,bundle.getDouble(getString(R.string.key_group_amount)));
 
-
         groupName.setText(pair.getName());
         amountOwed.setText(get_amount_string(pair.getAmount()));
 
         adapter = new TagRVAdapter(this,pair.getId());
         recyclerView.setAdapter(adapter);
+
+        fab = findViewById(R.id.fab);
+        firestoreHelper = new FirestoreHelper(this);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String uid = firestoreHelper.getUserId();
+                firestoreHelper.getUserRef().get().addOnSuccessListener(GroupOpen.this, new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String uname = Objects.requireNonNull(documentSnapshot.toObject(IdTypeDoc.class)).getName();
+
+                        Intent intent = new Intent(GroupOpen.this, AddTransactionGroup.class);
+
+                        Bundle bundle = new Bundle();
+                        ArrayList<User> userref = new ArrayList<>();
+                        userref.add(new User(uid,uname));
+                        bundle.putParcelableArrayList(getString(R.string.key_users_selection),userref);
+                        intent.putExtras(bundle);
+                        intent.putExtra(getString(R.string.key_group_id),pair.getId());
+                        startActivity(intent);
+                    }
+                })
+                        .addOnFailureListener(GroupOpen.this, new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(GroupOpen.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        })
+                ;
+            }
+        });
     }
 
     @Override

@@ -12,7 +12,7 @@
         android:id="@+id/group_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="10sp"
+        android:padding="10dp"
         android:text="@string/group_name"
         android:textAlignment="center"
         android:textSize="20sp"

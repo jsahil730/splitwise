@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,12 +18,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.splitwise.AmountTypeDoc;
 import com.example.splitwise.FirestoreHelper;
+import com.example.splitwise.IdTypeDoc;
 import com.example.splitwise.MainActivity;
 import com.example.splitwise.R;
+import com.example.splitwise.add_friend_or_group.User;
 import com.example.splitwise.main.RVAdapter;
+import com.example.splitwise.transaction.AddTransaction;
 import com.example.splitwise.transaction.IdAmountDocPair;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -39,6 +45,7 @@ public class FriendOpen extends AppCompatActivity {
     RecyclerView recyclerView;
     RVAdapter adapter;
     IdAmountDocPair pair;
+    FloatingActionButton fab;
     FirestoreHelper firestoreHelper;
     List<IdAmountDocPair> commonGroups;
 
@@ -77,7 +84,38 @@ public class FriendOpen extends AppCompatActivity {
         adapter = new RVAdapter(false, this, commonGroups, 4);
 
         recyclerView.setAdapter(adapter);
+        fab = findViewById(R.id.fab);
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String uid = firestoreHelper.getUserId();
+                firestoreHelper.getUserRef().get().addOnSuccessListener(FriendOpen.this, new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String uname = Objects.requireNonNull(documentSnapshot.toObject(IdTypeDoc.class)).getName();
+
+                        Intent intent = new Intent(FriendOpen.this, AddTransaction.class);
+
+                        Bundle bundle = new Bundle();
+                        ArrayList<User> userref = new ArrayList<>();
+                        userref.add(new User(uid,uname));
+                        userref.add(new User(pair.getId(),pair.getName()));
+                        bundle.putParcelableArrayList(getString(R.string.key_users_selection),userref);
+                        intent.putExtras(bundle);
+
+                        startActivity(intent);
+                    }
+                })
+                        .addOnFailureListener(FriendOpen.this, new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(FriendOpen.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        })
+                ;
+            }
+        });
 
     }
 
