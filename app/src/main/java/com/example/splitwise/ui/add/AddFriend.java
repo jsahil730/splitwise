@@ -1,10 +1,11 @@
-package com.example.splitwise.add_friend_or_group;
+package com.example.splitwise.ui.add;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
