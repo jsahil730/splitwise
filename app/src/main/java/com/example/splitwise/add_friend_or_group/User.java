@@ -1,9 +1,7 @@
-package com.example.splitwise.ui.add;
+package com.example.splitwise.add_friend_or_group;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.util.Objects;
 
 public class User implements Parcelable {
 
