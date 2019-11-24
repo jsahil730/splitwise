@@ -2,11 +2,15 @@ package com.example.splitwise.add_friend_or_group;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,8 +22,7 @@ import com.example.splitwise.R;
 public class AddFriend extends AppCompatActivity {
 
     EditText friend_id;
-    Button finish_button;
-    Toolbar toolbar;
+    FirestoreHelper firestoreHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,15 +30,21 @@ public class AddFriend extends AppCompatActivity {
         setContentView(R.layout.activity_add_friend);
 
         friend_id = findViewById(R.id.add_friend);
-        finish_button = findViewById(R.id.save_friend);
-        toolbar= findViewById(R.id.toolbar);
-        final FirestoreHelper firestoreHelper=new FirestoreHelper(this);
+        firestoreHelper=new FirestoreHelper(this);
 
-        toolbar.setTitle("Add Friend");
+    }
 
-        finish_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_add_friend,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.save_friend:
                 String friend_user_id = friend_id.getText().toString();
 
                 if (friend_user_id.isEmpty()) {
@@ -52,7 +61,9 @@ public class AddFriend extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-            }
-        });
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

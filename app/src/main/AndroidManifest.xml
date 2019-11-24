@@ -12,6 +12,23 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".group_ui.SelectTransactionUsersGroup"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".group_ui.AddTransactionGroup"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".group_ui.BalancesGroup"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".group_ui.SettleUpGroup"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
             android:name=".friend_ui.FriendOpen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ActionBar" />
@@ -21,7 +38,6 @@
             android:theme="@style/AppTheme.ActionBar" />
         <activity
             android:name=".group_ui.GroupOpen"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ActionBar" />
         <activity
@@ -69,7 +85,8 @@
             android:theme="@style/AppTheme.ActionBar" />
         <activity
             android:name=".add_friend_or_group.AddFriend"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar" />
     </application>
 
 </manifest>

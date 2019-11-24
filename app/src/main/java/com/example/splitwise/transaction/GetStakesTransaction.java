@@ -2,6 +2,7 @@ package com.example.splitwise.transaction;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,6 +32,7 @@ public class GetStakesTransaction extends AppCompatActivity {
     Double amt;
     String desc;
     String tag_tr;
+    String group_id;
     ArrayList<UserTransact> list_trans;
     TextView totalAmount;
 
@@ -45,6 +47,7 @@ public class GetStakesTransaction extends AppCompatActivity {
         amt = Objects.requireNonNull(bundle).getDouble(getString(R.string.key_transac_amt));
         desc = bundle.getString(getString(R.string.key_transac_desc));
         tag_tr = bundle.getString(getString(R.string.key_transac_tag));
+        group_id = bundle.getString(getString(R.string.key_group_id),null);
         list_trans = new ArrayList<>();
         ArrayList<User> list1 = bundle.getParcelableArrayList(getString(R.string.key_transac_user_list));
 
@@ -54,7 +57,7 @@ public class GetStakesTransaction extends AppCompatActivity {
 
         equal_split = findViewById(R.id.switch_split);
         recyclerView = findViewById(R.id.users_stake_list);
-        adapter = new StakeRVAdapter(list_trans,this,null,equal_split,amt);
+        adapter = new StakeRVAdapter(list_trans,this,group_id,equal_split,amt);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         totalAmount.setText(String.format("Total Amount : %.2f",amt));
@@ -66,7 +69,7 @@ public class GetStakesTransaction extends AppCompatActivity {
         menuInflater.inflate(R.menu.menu_get_stakes,menu);
         return true;
     }
-
+    
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -82,7 +85,7 @@ public class GetStakesTransaction extends AppCompatActivity {
                     }
                     Calendar today = Calendar.getInstance();
 
-                    TransactionRecord transactionRecord= new TransactionRecord(l, desc, amt,tag_tr,today.getTime());
+                    TransactionRecord transactionRecord= new TransactionRecord(group_id,l, desc, amt,tag_tr,today.getTime());
 
                     FirestoreHelper firestoreHelper= new FirestoreHelper(this);
                     firestoreHelper.processTransaction(transactionRecord);

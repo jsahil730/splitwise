@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final String uid = firestoreHelper.getUserId();
                 firestoreHelper.getUserRef().get().addOnSuccessListener(MainActivity.this, new OnSuccessListener<DocumentSnapshot>() {
-                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         String uname = Objects.requireNonNull(documentSnapshot.toObject(IdTypeDoc.class)).getName();
@@ -91,31 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 ;
             }
         });
-
-//        UserTransact u1 = new UserTransact("anubhav@splitwise.clone","anubhav",40,50);
-//        UserTransact u2 = new UserTransact("atulya@splitwise.clone","atulya",10,20);
-//        UserTransact u3 = new UserTransact("sahil@splitwise.clone","sahil",90,70);
-//        UserTransact b1 = new UserTransact("anubhav@splitwise.clone","anubhav",60,50);
-//        UserTransact b2 = new UserTransact("atulya@splitwise.clone","atulya",10,20);
-//        UserTransact b3 = new UserTransact("sahil@splitwise.clone","sahil",70,70);
-//        List<UserTransact> l1 = new ArrayList<>();
-//        List<UserTransact> l2 = new ArrayList<>();
-//        l2.add(b1);l2.add(b2);l2.add(b3);
-//        l1.add(u1);l1.add(u2);l1.add(u3);
-//        Calendar today = Calendar.getInstance();
-//        today.set(Calendar.HOUR_OF_DAY, 0);
-//        TransactionRecord record = new TransactionRecord("RfYNWVNSZd6ZwxqgzLrI",l1,"checking",140,"Food",today.getTime());
-//        firestoreHelper.processTransaction(record);
-//        firestoreHelper.processTransaction(record);
-//        List<String> to_settle = new ArrayList<>();
-//        to_settle.add("anubhav@splitwise.clone");
-//        to_settle.add("atulya@splitwise.clone");
-//        to_settle.add("sahil@splitwise.clone");
-//
-//
-//        firestoreHelper.settleGroup("Sjernv5Nks3FAGhF0AKQ",to_settle,today.getTime());
-//        firestoreHelper.settle_non_group("atulya@splitwise.clone",today.getTime());
-//        firestoreHelper.leave_group("BshjvAspmAhhrC6CaNQN",today.getTime());
     }
 
     @Override
