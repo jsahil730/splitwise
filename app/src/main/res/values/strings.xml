@@ -34,7 +34,7 @@
     <string name="users_transac">Add users to transaction</string>
     <string-array name="tag_choices">
         <item>General</item>
-        <item>Food/Drinks</item>
+        <item>Food</item>
         <item>Transport</item>
         <item>Utilities</item>
         <item>Home</item>
