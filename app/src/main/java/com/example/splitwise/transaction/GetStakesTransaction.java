@@ -13,11 +13,13 @@ import android.view.MenuItem;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.example.splitwise.FirestoreHelper;
 import com.example.splitwise.MainActivity;
 import com.example.splitwise.R;
 import com.example.splitwise.add_friend_or_group.User;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Objects;
 
 public class GetStakesTransaction extends AppCompatActivity {
@@ -66,8 +68,21 @@ public class GetStakesTransaction extends AppCompatActivity {
             case R.id.finish_transaction:
                 ArrayList<UserTransact> list = adapter.getList_users();
                 if (list != null) {
-                    list_trans = list;
+                    ArrayList<UserTransact> l = new ArrayList<>();
+
+                    for (UserTransact u : list) {
+                        if (u.getAmount_paid() != 0 || u.getStake() != 0) {
+                            l.add(u);
+                        }
+                    }
                     //Apply transaction function
+                    Calendar today = Calendar.getInstance();
+
+                    TransactionRecord transactionRecord= new TransactionRecord(l, desc, amt,tag_tr,today.getTime());
+
+                    FirestoreHelper firestoreHelper= new FirestoreHelper(this);
+                    firestoreHelper.processTransaction(transactionRecord);
+
                     Intent intent = new Intent(this, MainActivity.class);
                     intent.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
