@@ -7,19 +7,19 @@
     android:orientation="vertical"
     tools:context=".transaction.AddTransaction">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark">
-    </androidx.appcompat.widget.Toolbar>
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar"-->
+<!--        android:layout_width="409dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="?attr/colorPrimary"-->
+<!--        android:minHeight="?attr/actionBarSize"-->
+<!--        android:theme="@style/ThemeOverlay.AppCompat.Dark">-->
+<!--    </androidx.appcompat.widget.Toolbar>-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical">-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,15 +27,14 @@
 
             <Spinner
                 android:id="@+id/tag_spinner"
-                android:layout_width="108dp"
+                android:layout_width="160dp"
                 android:layout_height="match_parent"
                 android:layout_margin="16dp" />
 
             <EditText
                 android:id="@+id/enter_amount"
-                android:layout_width="234dp"
+                android:layout_width="160dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
                 android:layout_margin="16dp"
                 android:hint="@string/enter_amount"
                 android:inputType="numberDecimal"
@@ -71,4 +70,4 @@
         </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
-</LinearLayout>
+<!--</LinearLayout>-->

@@ -2,7 +2,6 @@ package com.example.splitwise.transaction;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,16 +21,12 @@ public class SelectTransactionUsers extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
-    Toolbar toolbar;
     ArrayList<User> list_users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transac_users);
-
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Select Transactors");
 
         Bundle bundle = getIntent().getExtras();
         list_users = Objects.requireNonNull(bundle).getParcelableArrayList(getString(R.string.key_friends));
