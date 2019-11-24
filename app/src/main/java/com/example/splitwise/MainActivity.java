@@ -20,6 +20,7 @@ import com.example.splitwise.add_friend_or_group.AddFriend;
 import com.example.splitwise.add_friend_or_group.CreateGroup;
 import com.example.splitwise.add_friend_or_group.User;
 import com.example.splitwise.main.SectionsPagerAdapter;
+import com.example.splitwise.transaction.AddTransaction;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         String uname = Objects.requireNonNull(documentSnapshot.toObject(IdTypeDoc.class)).getName();
 
-                        Intent intent = new Intent(MainActivity.this, CreateGroup.class);
+                        Intent intent = new Intent(MainActivity.this, AddTransaction.class);
 
                         Bundle bundle = new Bundle();
                         ArrayList<User> userref = new ArrayList<>();

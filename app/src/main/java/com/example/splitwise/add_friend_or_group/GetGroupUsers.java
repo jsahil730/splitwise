@@ -20,16 +20,12 @@ public class GetGroupUsers extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
-    Toolbar toolbar;
     ArrayList<User> list_users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_group_users);
-
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Select Users");
 
         Bundle bundle = getIntent().getExtras();
         list_users = Objects.requireNonNull(bundle).getParcelableArrayList(getString(R.string.key_friends));
