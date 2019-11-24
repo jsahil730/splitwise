@@ -1,6 +1,8 @@
 package com.example.splitwise;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.util.Log;
 import android.util.Pair;
@@ -1123,9 +1125,9 @@ public class FirestoreHelper {
             @Override
             public void onSuccess(final DocumentSnapshot documentSnapshot) {
                 AmountTypeDoc temp = documentSnapshot.toObject(AmountTypeDoc.class);
-                if(temp.getAmount()!=0)
+                if(Objects.requireNonNull(temp).getAmount()!=0)
                 {
-                    //can display this if given context; Toast.makeText(context, "you cannot leave the group", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "you must settle up to leave the group", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
@@ -1133,7 +1135,7 @@ public class FirestoreHelper {
                             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot2) {
-                                    final String who_left = documentSnapshot2.toObject(AmountTypeDoc.class).getName();
+                                    final String who_left = Objects.requireNonNull(documentSnapshot2.toObject(AmountTypeDoc.class)).getName();
                                     final DocumentReference myDocInGroup = groupsRef.document(groupID).collection(res.getString(R.string.GroupUsers)).document(userId);
                                     myDocInGroup.collection(res.getString(R.string.borrowersCollection)).get()
                                             .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -1147,7 +1149,7 @@ public class FirestoreHelper {
                                                     {
                                                         final_settle.add(documentSnapshot1.getId());
                                                         AmountTypeDoc temp = documentSnapshot1.toObject(AmountTypeDoc.class);
-                                                        if(temp.getAmount()>0)
+                                                        if(Objects.requireNonNull(temp).getAmount()>0)
                                                         {
                                                             total_pos_amount=total_pos_amount+temp.getAmount();
                                                             UserTransact t1 = new UserTransact(documentSnapshot1.getId(),temp.getName(),temp.getAmount(),0);
@@ -1167,8 +1169,10 @@ public class FirestoreHelper {
                                                             total_pos_amount,"General",date);
                                                     processTransaction(t2);
 
-
-
+                                                    Intent intent = new Intent(context,MainActivity.class);
+                                                    context.startActivity(intent);
+                                                    Activity activity = (Activity) context;
+                                                    activity.finish();
 
                                                 }
                                             }).addOnFailureListener(new OnFailureListener() {

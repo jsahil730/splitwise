@@ -55,4 +55,6 @@
     <string name="owed_amount">Amount Owed</string>
     <string name="Activities">Activities</string>
     <string name="key_groupId">groupId</string>
+    <string name="key_user_settle">settle_users</string>
+    <string name="key_user_balances">balances_users</string>
 </resources>

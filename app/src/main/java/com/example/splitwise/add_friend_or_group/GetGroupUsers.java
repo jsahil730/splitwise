@@ -19,7 +19,7 @@ import java.util.Objects;
 public class GetGroupUsers extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    RecyclerView.Adapter adapter;
+    FriendRVAdapter adapter;
     ArrayList<User> list_users;
 
     @Override
@@ -49,7 +49,7 @@ public class GetGroupUsers extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.finish_user_selection:
-                list_users = ((FriendRVAdapter) adapter).list_selected_users();
+                list_users = adapter.list_selected_users();
 
                 Intent intent = new Intent(GetGroupUsers.this,CreateGroup.class);
 
