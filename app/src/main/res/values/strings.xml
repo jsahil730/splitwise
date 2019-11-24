@@ -28,21 +28,4 @@
     <string name="key_name_group">group_name</string>
     <string name="key_friends">friends_list</string>
     <string name="key_users_selection">selected_users</string>
-    <string name="Next">next</string>
-    <string name="hint_desc">Enter Description here</string>
-    <string name="enter_amount">Enter Amount here</string>
-    <string name="users_transac">Add users to transaction</string>
-    <string-array name="tag_choices">
-        <item>General</item>
-        <item>Food</item>
-        <item>Transport</item>
-        <item>Utilities</item>
-        <item>Home</item>
-    </string-array>
-    <string name="key_transac_amt">amount</string>
-    <string name="key_transac_desc">description</string>
-    <string name="key_transac_user_list">user_list</string>
-    <string name="key_transac_tag">transaction_tag</string>
-    <string name="equal_split">Split Equally</string>
-    <string name="amount_string">0.00</string>
 </resources>
