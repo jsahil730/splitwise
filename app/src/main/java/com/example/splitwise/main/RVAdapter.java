@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.splitwise.AmountTypeDoc;
 import com.example.splitwise.R;
 import com.example.splitwise.friend_ui.FriendOpen;
 import com.example.splitwise.group_ui.GroupOpen;
@@ -31,7 +30,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<IdAmountDocPair> list_items;
     private int index;
 
-    RVAdapter(boolean activity_tab, Context context, List<IdAmountDocPair> list_items, int index) {
+    public RVAdapter(boolean activity_tab, Context context, List<IdAmountDocPair> list_items, int index) {
         this.activity_tab = activity_tab;
         this.context = context;
         this.list_items = list_items;
