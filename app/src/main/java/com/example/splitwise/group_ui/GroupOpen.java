@@ -1,10 +1,5 @@
 package com.example.splitwise.group_ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,12 +8,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.splitwise.R;
-import com.example.splitwise.add_friend_or_group.FriendRVAdapter;
-import com.example.splitwise.add_friend_or_group.User;
 import com.example.splitwise.transaction.IdAmountDocPair;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class GroupOpen extends AppCompatActivity {
@@ -56,14 +53,6 @@ public class GroupOpen extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new TagRVAdapter(this);
-        recyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
         Bundle bundle = getIntent().getExtras();
         pair = new IdAmountDocPair(Objects.requireNonNull(bundle).getString(getString(R.string.key_group_id)),bundle.getString(getString(R.string.key_group_name))
                 ,bundle.getDouble(getString(R.string.key_group_amount)));
@@ -72,6 +61,8 @@ public class GroupOpen extends AppCompatActivity {
         groupName.setText(pair.getName());
         amountOwed.setText(get_amount_string(pair.getAmount()));
 
+        adapter = new TagRVAdapter(this,pair.getId());
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

@@ -26,7 +26,6 @@ import com.example.splitwise.transaction.UserTransact;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -97,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        UserTransact u1 = new UserTransact("anubhav@splitwise.clone","anubhav",50,40);
+        UserTransact u1 = new UserTransact("anubhav@splitwise.clone","anubhav",40,50);
         UserTransact u2 = new UserTransact("atulya@splitwise.clone","atulya",10,20);
         UserTransact u3 = new UserTransact("sahil@splitwise.clone","sahil",90,70);
         UserTransact b1 = new UserTransact("anubhav@splitwise.clone","anubhav",60,50);
@@ -106,10 +105,10 @@ public class MainActivity extends AppCompatActivity {
         List<UserTransact> l1 = new ArrayList<>();
         List<UserTransact> l2 = new ArrayList<>();
         l2.add(b1);l2.add(b2);l2.add(b3);
-        l1.add(u1);l1.add(u2);//l1.add(u3);
+        l1.add(u1);l1.add(u2);l1.add(u3);
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY, 0);
-        TransactionRecord record = new TransactionRecord(null,l1,"checking",60,"food",today.getTime());
+        TransactionRecord record = new TransactionRecord("qFZS00CP6cNodrrU52Uo",l1,"checking",140,"Food",today.getTime());
 //        firestoreHelper.processTransaction(record);
 //        firestoreHelper.processTransaction(record);
 //        List<String> to_settle = new ArrayList<>();

@@ -73,6 +73,9 @@ public class FirestoreHelper {
 
     private CollectionReference groupsRef;
 
+    public CollectionReference getGroupsRef(){
+        return  groupsRef;
+    }
 
     public FirestoreHelper() {
     }

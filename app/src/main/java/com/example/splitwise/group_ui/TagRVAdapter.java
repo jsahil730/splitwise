@@ -2,6 +2,7 @@ package com.example.splitwise.group_ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,12 @@ public class TagRVAdapter extends RecyclerView.Adapter {
 
     private List<String> list;
     private Context context;
+    private String groupId;
 
-    TagRVAdapter(Context context) {
+    TagRVAdapter(Context context, String groupId) {
         this.context = context;
         list = Arrays.asList(context.getResources().getStringArray(R.array.tag_choices));
+        this.groupId=groupId;
     }
 
     @NonNull
@@ -42,7 +45,10 @@ public class TagRVAdapter extends RecyclerView.Adapter {
             public void onClick(View v) {
                 String tag = list.get(position);
                 Intent intent = new Intent(context,TransactionsList.class);
-                intent.putExtra(context.getString(R.string.key_tag),tag);
+                Bundle bun = new Bundle();
+                bun.putString(context.getString(R.string.key_groupId),groupId);
+                bun.putString(context.getString(R.string.key_tag),tag);
+                intent.putExtras(bun);
                 context.startActivity(intent);
             }
         });
