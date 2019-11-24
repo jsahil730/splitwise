@@ -21,8 +21,6 @@ import com.example.splitwise.add_friend_or_group.User;
 import com.example.splitwise.login_or_signup.SignupPage;
 import com.example.splitwise.main.SectionsPagerAdapter;
 import com.example.splitwise.transaction.AddTransaction;
-import com.example.splitwise.transaction.TransactionRecord;
-import com.example.splitwise.transaction.UserTransact;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,8 +33,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
@@ -96,19 +92,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        UserTransact u1 = new UserTransact("anubhav@splitwise.clone","anubhav",40,50);
-        UserTransact u2 = new UserTransact("atulya@splitwise.clone","atulya",10,20);
-        UserTransact u3 = new UserTransact("sahil@splitwise.clone","sahil",90,70);
-        UserTransact b1 = new UserTransact("anubhav@splitwise.clone","anubhav",60,50);
-        UserTransact b2 = new UserTransact("atulya@splitwise.clone","atulya",10,20);
-        UserTransact b3 = new UserTransact("sahil@splitwise.clone","sahil",70,70);
-        List<UserTransact> l1 = new ArrayList<>();
-        List<UserTransact> l2 = new ArrayList<>();
-        l2.add(b1);l2.add(b2);l2.add(b3);
-        l1.add(u1);l1.add(u2);l1.add(u3);
-        Calendar today = Calendar.getInstance();
-        today.set(Calendar.HOUR_OF_DAY, 0);
-        TransactionRecord record = new TransactionRecord("qFZS00CP6cNodrrU52Uo",l1,"checking",140,"Food",today.getTime());
+//        UserTransact u1 = new UserTransact("anubhav@splitwise.clone","anubhav",40,50);
+//        UserTransact u2 = new UserTransact("atulya@splitwise.clone","atulya",10,20);
+//        UserTransact u3 = new UserTransact("sahil@splitwise.clone","sahil",90,70);
+//        UserTransact b1 = new UserTransact("anubhav@splitwise.clone","anubhav",60,50);
+//        UserTransact b2 = new UserTransact("atulya@splitwise.clone","atulya",10,20);
+//        UserTransact b3 = new UserTransact("sahil@splitwise.clone","sahil",70,70);
+//        List<UserTransact> l1 = new ArrayList<>();
+//        List<UserTransact> l2 = new ArrayList<>();
+//        l2.add(b1);l2.add(b2);l2.add(b3);
+//        l1.add(u1);l1.add(u2);l1.add(u3);
+//        Calendar today = Calendar.getInstance();
+//        today.set(Calendar.HOUR_OF_DAY, 0);
+//        TransactionRecord record = new TransactionRecord("RfYNWVNSZd6ZwxqgzLrI",l1,"checking",140,"Food",today.getTime());
 //        firestoreHelper.processTransaction(record);
 //        firestoreHelper.processTransaction(record);
 //        List<String> to_settle = new ArrayList<>();

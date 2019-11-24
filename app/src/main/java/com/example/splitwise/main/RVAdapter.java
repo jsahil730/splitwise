@@ -30,7 +30,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<IdAmountDocPair> list_items;
     private int index;
 
-    public RVAdapter(boolean activity_tab, Context context, List<IdAmountDocPair> list_items, int ind
+    public RVAdapter(boolean activity_tab, Context context, List<IdAmountDocPair> list_items, int index) {
         this.activity_tab = activity_tab;
         this.context = context;
         this.list_items = list_items;

@@ -66,11 +66,6 @@ public class FirestoreHelper {
     private Resources res;
     private Context context;
 
-
-    public CollectionReference getGroupsRef() {
-        return groupsRef;
-    }
-
     private CollectionReference groupsRef;
 
     public CollectionReference getGroupsRef(){
