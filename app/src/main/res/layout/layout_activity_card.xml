@@ -19,12 +19,24 @@
 
             <TextView
                 android:id="@+id/activity_done"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="@string/textview"
                 android:textColor="#000"
                 android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/transac_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="@string/textview"
+                android:textColor="#000"
+                android:textSize="17sp"
+                tools:ignore="RelativeOverlap,RtlHardcoded" />
+
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

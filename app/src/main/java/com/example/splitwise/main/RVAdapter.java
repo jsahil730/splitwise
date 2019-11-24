@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.splitwise.AmountTypeDoc;
 import com.example.splitwise.R;
 import com.example.splitwise.friend_ui.FriendOpen;
 import com.example.splitwise.group_ui.GroupOpen;
@@ -31,7 +30,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<IdAmountDocPair> list_items;
     private int index;
 
-    RVAdapter(boolean activity_tab, Context context, List<IdAmountDocPair> list_items, int index) {
+  public  RVAdapter(boolean activity_tab, Context context, List<IdAmountDocPair> list_items, int index) {
         this.activity_tab = activity_tab;
         this.context = context;
         this.list_items = list_items;
@@ -97,7 +96,14 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         if (activity_tab) {
             switch (getItemViewType(position)) {
-                case Normal:
+                case Normal:// set text for all
+                    if(list_items.get(position).getId()==null)
+                    {
+                        ((ActivityViewHolder) holder).transac_amount.setText("You are Not involved");
+                    }
+                    else {
+                        ((ActivityViewHolder) holder).transac_amount.setText(getText(list_items.get(position).getAmount()));
+                    }
                     ((ActivityViewHolder) holder).activity_done.setText(list_items.get(position).getName());
                     break;
                 case Footer:
@@ -178,11 +184,13 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public class ActivityViewHolder extends RecyclerView.ViewHolder {
         TextView activity_done;
-
+        TextView transac_amount;
+        // add new textView and initialize;
         ActivityViewHolder(@NonNull View itemView) {
             super(itemView);
 
             activity_done = itemView.findViewById(R.id.activity_done);
+            transac_amount = itemView.findViewById(R.id.transac_amount);
         }
     }
 
