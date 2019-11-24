@@ -1,5 +1,8 @@
 package com.example.splitwise.transaction;
 
+import com.example.splitwise.add_friend_or_group.User;
+
+@SuppressWarnings("ALL")
 public class UserTransact {
 
     private String userID;
@@ -17,6 +20,13 @@ public class UserTransact {
         this.name=name;
         this.amount_paid = amount_paid;
         this.stake = stake;
+    }
+
+    public UserTransact(User u) {
+        this.userID = u.getUid();
+        this.name = u.getUname();
+        this.amount_paid = 0;
+        this.stake = 0;
     }
 
     public String getUserID() {
