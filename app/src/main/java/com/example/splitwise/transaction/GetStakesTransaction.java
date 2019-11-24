@@ -91,9 +91,8 @@ public class GetStakesTransaction extends AppCompatActivity {
                     firestoreHelper.processTransaction(transactionRecord);
 
                     Intent intent = new Intent(this, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                    finishAndRemoveTask();
                 }
                 return true;
             default:

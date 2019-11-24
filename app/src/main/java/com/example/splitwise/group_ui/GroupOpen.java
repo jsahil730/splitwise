@@ -123,7 +123,6 @@ public class GroupOpen extends AppCompatActivity {
                         Log.i("friend error", e.getMessage());
                     }
                 });
-                //settle up here
                 return true;
             case R.id.balances:
                 //balances displayed
