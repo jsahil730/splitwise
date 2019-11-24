@@ -92,9 +92,7 @@ public class AddTransaction extends AppCompatActivity implements AdapterView.OnI
                                     User temp = new User(documentSnapshot.getId(), Objects.requireNonNull(documentSnapshot.toObject(IdTypeDoc.class)).getName());
                                     friends.add(temp);
                                 }
-
                                 Intent intent = new Intent(AddTransaction.this, SelectTransactionUsers.class);
-
                                 Bundle bundle = new Bundle();
                                 bundle.putParcelableArrayList(getString(R.string.key_friends),friends);
                                 intent.putExtras(bundle);
