@@ -34,7 +34,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
@@ -71,23 +70,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        UserTransact u1 = new UserTransact("anubhav@splitwise.clone","anubhav",40,50);
-//        UserTransact u2 = new UserTransact("atulya@splitwise.clone","atulya",30,60);
+//        UserTransact u1 = new UserTransact("anubhav@splitwise.clone","anubhav",40,90);
+//        UserTransact u2 = new UserTransact("atulya@splitwise.clone","atulya",30,20);
 //        UserTransact u3 = new UserTransact("sahil@splitwise.clone","sahil",90,50);
 //        List<UserTransact> l1 = new ArrayList<>();
 //        l1.add(u1);l1.add(u2);l1.add(u3);
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY, 0);
-//        TransactionRecord record = new TransactionRecord("Sjernv5Nks3FAGhF0AKQ",l1,"checking",160,"food",today.getTime());
+//        TransactionRecord record = new TransactionRecord("giwDxgAMm82i8w7EGhRU",l1,"checking2",160,"food",today.getTime());
 //        firestoreHelper.processTransaction(record);
 //        firestoreHelper.processTransaction(record);
-        List<String> to_settle = new ArrayList<>();
-        to_settle.add("anubhav@splitwise.clone");
-        to_settle.add("atulya@splitwise.clone");
-        to_settle.add("sahil@splitwise.clone");
+//        List<String> to_settle = new ArrayList<>();
+//        to_settle.add("anubhav@splitwise.clone");
+//        to_settle.add("atulya@splitwise.clone");
+//        to_settle.add("sahil@splitwise.clone");
+//
+//
+//        firestoreHelper.settleGroup("Sjernv5Nks3FAGhF0AKQ",to_settle,today.getTime());
 
-
-        firestoreHelper.settleGroup("Sjernv5Nks3FAGhF0AKQ",to_settle,today.getTime());
+       // firestoreHelper.settle_non_group("sahil@splitwise.clone", today.getTime());
 
     }
 
