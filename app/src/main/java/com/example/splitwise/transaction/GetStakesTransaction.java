@@ -11,8 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Switch;
-import android.widget.Toast;
-
 import com.example.splitwise.FirestoreHelper;
 import com.example.splitwise.MainActivity;
 import com.example.splitwise.R;
