@@ -63,7 +63,7 @@ public class TransactionsList extends AppCompatActivity {
         collectionReference.addSnapshotListener(this,new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-
+                list_items.clear();
                 for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots)
                 {
                     final TransacDoc temp = documentSnapshot.toObject(TransacDoc.class);

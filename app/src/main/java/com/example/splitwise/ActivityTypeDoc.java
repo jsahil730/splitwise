@@ -1,18 +1,16 @@
 package com.example.splitwise;
 
-import java.util.Date;
-
 public class ActivityTypeDoc {
 
     private String groupId;
     private String description;
     private double amount;
     private String tag;
-    private Date date;
+    private String date;
 
     public ActivityTypeDoc(){}
 
-    public ActivityTypeDoc(String groupId, String description, double amount, String tag, Date date) {
+    public ActivityTypeDoc(String groupId, String description, double amount, String tag, String date) {
         if(groupId==null)
         {
             this.groupId="Non Group";
@@ -42,6 +40,10 @@ public class ActivityTypeDoc {
 
     public String getTag() {
         return tag;
+    }
+
+    public String getDate() {
+        return date;
     }
 }
 

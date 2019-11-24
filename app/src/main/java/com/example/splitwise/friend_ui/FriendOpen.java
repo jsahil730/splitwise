@@ -92,7 +92,7 @@ public class FriendOpen extends AppCompatActivity {
 
         friendName.setText(pair.getName());
         amountOwed.setText(get_amount_string(pair.getAmount()));
-
+        commonGroups.clear();
         final CollectionReference groupsRef= firestoreHelper.getGroupsRef();
         DocumentReference myRef= firestoreHelper.getUserRef();
         myRef.collection(getString(R.string.user_groups)).get()
