@@ -22,6 +22,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1201,8 +1203,10 @@ public class FirestoreHelper {
             IdAmountDocPair targetUser= user1.first;
 
             String targetId= targetUser.getId();
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+            String strDate = dateFormat.format(date);
 
-            ActivityTypeDoc activity= new ActivityTypeDoc(groupId, description, targetUser.getAmount(), tag, date);
+            ActivityTypeDoc activity= new ActivityTypeDoc(groupId, description, targetUser.getAmount(), tag, strDate);
 
             userColRef.document(targetId).collection(res.getString(R.string.Activities))
                     .add(activity);
