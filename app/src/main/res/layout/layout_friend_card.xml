@@ -32,8 +32,7 @@
                 android:textColor="#000"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="30dp"
-                android:textSize="17sp"
-                tools:ignore="RtlHardcoded" />
+                android:textSize="17sp"/>
 
             <ImageView
                 android:id="@+id/imageView"
@@ -42,8 +41,7 @@
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ic_check_14dp"
                 android:layout_centerVertical="true"
-                android:visibility="gone"
-                tools:ignore="ContentDescription,RtlHardcoded" />
+                android:visibility="gone" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 

@@ -1,4 +1,4 @@
-package com.example.splitwise.main;
+package com.example.splitwise.ui.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -100,13 +100,18 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         else {
             switch (getItemViewType(position)) {
                 case Header:
-                    if(!list_items.isEmpty()) {
-                        double amount = list_items.get(0).getAmount();
-                        amount *= 100;
-                        amount = (double) Math.round(amount);
-                        amount = amount/100;
-                        ((HeaderViewHolder) holder).total_balance.setText(String.format("Your Current Balance is : %.2f",amount));
+                    System.out.println("hello bitch");
+                    if (list_items != null) {
+                        for (AmountTypeDoc a : list_items) {
+                            System.out.println(a.getName());
+                        }
                     }
+                    if(!list_items.isEmpty()){
+                    double amount = list_items.get(0).getAmount();
+                    amount *= 100;
+                    amount = (double) Math.round(amount);
+                    amount = amount/100;
+                    ((HeaderViewHolder) holder).total_balance.setText(String.format("Your Current Balance is : %.2f",amount));}
                     break;
                 case Normal:
                     AmountTypeDoc pair = list_items.get(position);
@@ -124,7 +129,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         String s;
         amount *= 100;
         amount = (double) Math.round(amount);
-        amount /= 100;
+        amount = amount/100;
         if (amount.floatValue() == 0) {
             s = "settled up";
         }
