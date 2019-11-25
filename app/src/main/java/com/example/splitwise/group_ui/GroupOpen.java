@@ -114,18 +114,6 @@ public class GroupOpen extends AppCompatActivity {
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-
-        Bundle bundle = getIntent().getExtras();
-        pair = new IdAmountDocPair(Objects.requireNonNull(bundle).getString(getString(R.string.key_group_id)),bundle.getString(getString(R.string.key_group_name))
-                ,bundle.getDouble(getString(R.string.key_group_amount)));
-
-        groupName.setText(pair.getName());
-        amountOwed.setText(get_amount_string(pair.getAmount()));
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_group,menu);
