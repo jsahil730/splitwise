@@ -64,11 +64,9 @@ public class FriendOpen extends AppCompatActivity {
             s = String.format("You owe %.2f",amount);
         }
         else {
-            s = String.format("You are owed %.2f",amount);
+            s = String.format("You are owed %.2f",-amount);
         }
         return s;
-
-
     }
 
     @SuppressLint("DefaultLocale")
