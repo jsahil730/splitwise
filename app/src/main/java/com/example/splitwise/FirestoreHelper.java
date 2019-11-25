@@ -1062,7 +1062,7 @@ public class FirestoreHelper {
 
                         Calendar today = Calendar.getInstance();
                         today.set(Calendar.HOUR_OF_DAY, 0);
-                        TransacDoc non_group_doc1 = new TransacDoc(null,"Non group settle up",Math.abs(non_groupAmount),"General",date);
+                        final TransacDoc non_group_doc1 = new TransacDoc(null,"Non group settle up",Math.abs(non_groupAmount),"General",date);
                         final TransacDoc non_group_doc2 = new TransacDoc(null,"Non group settle up",Math.abs(non_groupAmount),"General",date);
 
                         userRef.get()
@@ -1089,33 +1089,116 @@ public class FirestoreHelper {
                                     }
                                 });
 
-
-                        userRef.collection(res.getString(R.string.nonGroupTransactionCollection))
-                                .document("General")
-                                .collection(res.getString(R.string.TransactionItems))
-                                .add(non_group_doc1)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        userRef.get()
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        String transacId = documentReference.getId();
-                                        friend_user_depth_one.collection(res.getString(R.string.nonGroupTransactionCollection))
+                                    public void onSuccess(final DocumentSnapshot documentSnapshot) {
+
+                                        userRef.collection(res.getString(R.string.nonGroupTransactionCollection))
                                                 .document("General")
                                                 .collection(res.getString(R.string.TransactionItems))
-                                                .document(transacId).set(non_group_doc2);
+                                                .add(non_group_doc1)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        final AmountTypeDoc t11 = documentSnapshot.toObject(AmountTypeDoc.class);
+                                                        String transacId = documentReference.getId();
+                                                        final DocumentReference excMe = documentReference.collection(res.getString(R.string.AllExchanges)).document(userId);
+                                                        final DocumentReference excFriend = documentReference.collection(res.getString(R.string.AllExchanges)).document(friendsId);
+                                                        excMe.set(new AmountTypeDoc(t11.getName(),-1*non_groupAmount))
+                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
+                                                                        excMe.collection(res.getString(R.string.userSpecificExchanges))
+                                                                                .document(friendsId).set(new AmountTypeDoc(temp.getName(),-1*non_groupAmount));
+                                                                        excFriend.set(new AmountTypeDoc(temp.getName(),non_groupAmount))
+                                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                    @Override
+                                                                                    public void onSuccess(Void aVoid) {
+                                                                                        excFriend.collection(res.getString(R.string.userSpecificExchanges))
+                                                                                                .document(userId).set(new AmountTypeDoc(t11.getName(),non_groupAmount));
+                                                                                    }
+                                                                                }).addOnFailureListener(new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                Log.i("settle non_group", e.getMessage());
+                                                                            }
+                                                                        });
+
+                                                                    }
+                                                                }).addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Log.i("settle_non_group", "onFailure: ");
+                                                            }
+                                                        });
+
+                                                       final DocumentReference d22 =  friend_user_depth_one.collection(res.getString(R.string.nonGroupTransactionCollection))
+                                                                .document("General")
+                                                                .collection(res.getString(R.string.TransactionItems))
+                                                                .document(transacId);
+                                                       d22.set(non_group_doc2).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                           @Override
+                                                           public void onSuccess(Void aVoid) {
+                                                               DocumentReference d22_me = d22.collection(res.getString(R.string.AllExchanges)).document(userId);
+                                                               final DocumentReference d22_friend = d22.collection(res.getString(R.string.AllExchanges)).document(friendsId);
+
+                                                               d22_me.set(new AmountTypeDoc(t11.getName(),-1*non_groupAmount))
+                                                                       .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                           @Override
+                                                                           public void onSuccess(Void aVoid) {
+                                                                               d22.collection(res.getString(R.string.userSpecificExchanges))
+                                                                                       .document(friendsId).set(new AmountTypeDoc(temp.getName(),-1*non_groupAmount));
+                                                                           }
+                                                                       }).addOnFailureListener(new OnFailureListener() {
+                                                                   @Override
+                                                                   public void onFailure(@NonNull Exception e) {
+                                                                       Log.i("settle_non_group", e.getMessage());
+                                                                   }
+                                                               });
+
+                                                               d22_friend.set(new AmountTypeDoc(temp.getName(),non_groupAmount))
+                                                                       .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                           @Override
+                                                                           public void onSuccess(Void aVoid) {
+                                                                               d22_friend.collection(res.getString(R.string.userSpecificExchanges))
+                                                                                       .document(userId).set(new AmountTypeDoc(t11.getName(),non_groupAmount));
+                                                                           }
+                                                                       }).addOnFailureListener(new OnFailureListener() {
+                                                                   @Override
+                                                                   public void onFailure(@NonNull Exception e) {
+                                                                       Log.i("settle_non_group", e.getMessage());
+                                                                   }
+                                                               });
+                                                           }
+                                                       }).addOnFailureListener(new OnFailureListener() {
+                                                           @Override
+                                                           public void onFailure(@NonNull Exception e) {
+
+                                                           }
+                                                       });
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.i("non_group", e.getMessage());
+                                            }
+                                        });
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.i("non_group", e.getMessage());
+                                Log.i("non group", e.getMessage());
                             }
                         });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.i("non group", e.getMessage());
+                Log.i("settle non_group", e.getMessage());
             }
         });
+
     }
 
     public void leave_group(final String groupID,final Date date)// this does not take any String as user id ; function is used by myself to leave a group
@@ -1165,7 +1248,7 @@ public class FirestoreHelper {
                                                     settleGroup(groupID,final_settle,date,userId);
 
                                                     TransactionRecord t2 = new TransactionRecord(groupID,final_userTransact,
-                                                            "Settle up because "+who_left+" has left the group",
+                                                            who_left+" \nleft the group",
                                                             total_pos_amount,"General",date);
                                                     processTransaction(t2);
 
