@@ -164,7 +164,9 @@ public class GroupOpen extends AppCompatActivity {
                 });
                 return true;
             case R.id.balances:
-                //balances displayed
+                Intent intent = new Intent(this,BalancesGroup.class);
+                intent.putExtra(getString(R.string.key_groupId),pair.getId());
+                startActivity(intent);
                 return true;
             case R.id.leave_group:
                 Calendar c = Calendar.getInstance();

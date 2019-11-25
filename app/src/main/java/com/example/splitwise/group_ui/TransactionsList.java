@@ -46,7 +46,7 @@ public class TransactionsList extends AppCompatActivity {
         bun = getIntent().getExtras();
         groupId = bun.getString(getString(R.string.key_groupId));
         transactionTag = bun.getString(getString(R.string.key_tag));
-        RecyclerView rvitems = findViewById(R.id.rvitems);
+        RecyclerView rvitems = findViewById(R.id.balanceRv);
         rvitems.setLayoutManager(new LinearLayoutManager(this));
         rvitems.setAdapter(adapter);
 
