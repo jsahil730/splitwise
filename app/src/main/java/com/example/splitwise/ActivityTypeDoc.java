@@ -11,14 +11,7 @@ public class ActivityTypeDoc {
     public ActivityTypeDoc(){}
 
     public ActivityTypeDoc(String groupId, String description, double amount, String tag, String date) {
-        if(groupId==null)
-        {
-            this.groupId="Non Group";
-        }
-        else
-        {
-            this.groupId= groupId;
-        }
+        this.groupId = groupId;
         this.description = description;
         this.amount = amount;
         this.tag = tag;
