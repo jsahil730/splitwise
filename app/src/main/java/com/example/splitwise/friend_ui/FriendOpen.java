@@ -160,7 +160,7 @@ public class FriendOpen extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        nonGroupAmount.setText(getText(documentSnapshot.toObject(TwoAmountDoc.class).getAmount()));
+                        nonGroupAmount.setText(getText(documentSnapshot.toObject(TwoAmountDoc.class).getSec_amount()));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
