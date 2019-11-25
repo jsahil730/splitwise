@@ -112,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
 
                 return true;
             case R.id.settings:
+                Intent intent2 = new Intent(this,Settings.class);
+                startActivity(intent2);
                 return true;
             case R.id.add_friend:
                 Intent intent3 = new Intent(this, AddFriend.class);

@@ -109,7 +109,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 case Normal:// set text for all
                     if(list_items.get(position).getId()==null)
                     {
-                        ((ActivityViewHolder) holder).transac_amount.setText("You are not involved");
+                        ((ActivityViewHolder) holder).transac_amount.setText("not involved");
                     }
                     else {
                         ((ActivityViewHolder) holder).transac_amount.setText(getText(list_items.get(position).getAmount()));
@@ -174,10 +174,10 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             s = "settled up";
         }
         else if (amount > 0) {
-            s = String.format("you owe \n %.2f",amount);
+            s = String.format("you owe\n%.2f",amount);
         }
         else {
-            s = String.format("owes you \n %.2f",-amount);
+            s = String.format("owes you\n%.2f",-amount);
         }
         return s;
     }
