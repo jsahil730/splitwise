@@ -12,6 +12,10 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".Settings"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar"/>
+        <activity
             android:name=".friend_ui.NonGroupTransactions"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ActionBar" />

@@ -52,7 +52,7 @@ public class AddFriend extends AppCompatActivity {
                 }
                 else {
 
-                    firestoreHelper.addFriend(friend_user_id);
+                    firestoreHelper.addFriend(friend_user_id+"@splitwise.clone");
 
                     Intent intent = new Intent(AddFriend.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
