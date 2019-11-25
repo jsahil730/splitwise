@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +22,7 @@ import com.example.splitwise.FirestoreHelper;
 import com.example.splitwise.IdTypeDoc;
 import com.example.splitwise.MainActivity;
 import com.example.splitwise.R;
+import com.example.splitwise.TwoAmountDoc;
 import com.example.splitwise.add_friend_or_group.User;
 import com.example.splitwise.main.RVAdapter;
 import com.example.splitwise.transaction.AddTransaction;
@@ -48,6 +50,8 @@ public class FriendOpen extends AppCompatActivity {
     FloatingActionButton fab;
     FirestoreHelper firestoreHelper;
     List<IdAmountDocPair> commonGroups;
+    TextView nonGroupAmount;
+    CardView nonGroupCard;
 
 
     @SuppressLint("DefaultLocale")
@@ -67,6 +71,24 @@ public class FriendOpen extends AppCompatActivity {
 
     }
 
+    @SuppressLint("DefaultLocale")
+    private String getText(Double amount) {
+        String s;
+        amount *= 100;
+        amount = (double) Math.round(amount);
+        amount /= 100;
+        if (amount.floatValue() == 0) {
+            s = "settled up";
+        }
+        else if (amount > 0) {
+            s = String.format("you owe \n %.2f",amount);
+        }
+        else {
+            s = String.format("owes you \n %.2f",-amount);
+        }
+        return s;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +100,8 @@ public class FriendOpen extends AppCompatActivity {
         friendName= findViewById(R.id.friendNameinActivity);
         amountOwed= findViewById(R.id.amountOwedToFriend);
         recyclerView= findViewById(R.id.commonGroupList);
+        nonGroupAmount= findViewById(R.id.transac_amount);
+        nonGroupCard= findViewById(R.id.nonGroupCard);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -131,6 +155,23 @@ public class FriendOpen extends AppCompatActivity {
         friendName.setText(pair.getName());
         amountOwed.setText(get_amount_string(pair.getAmount()));
         commonGroups.clear();
+
+        firestoreHelper.getUserRef()
+                .collection(getString(R.string.FriendsCollection))
+                .document(pair.getId()).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        nonGroupAmount.setText(getText(documentSnapshot.toObject(TwoAmountDoc.class).getAmount()));
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("", e.getMessage());
+                    }
+                });
+
         final CollectionReference groupsRef= firestoreHelper.getGroupsRef();
         DocumentReference myRef= firestoreHelper.getUserRef();
         myRef.collection(getString(R.string.user_groups)).get()
@@ -209,18 +250,18 @@ public class FriendOpen extends AppCompatActivity {
                     }
                 });
 
-    }
+        nonGroupCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(FriendOpen.this, NonGroupTransactions.class);
+                intent.putExtra(getString(R.string.key_friends),pair.getId());
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
+                startActivity(intent);
+            }
+        });
 
-        Bundle bundle = getIntent().getExtras();
-        pair = new IdAmountDocPair(Objects.requireNonNull(bundle).getString(getString(R.string.key_group_id)),bundle.getString(getString(R.string.key_group_name))
-                ,bundle.getDouble(getString(R.string.key_group_amount)));
 
-        friendName.setText(pair.getName());
-        amountOwed.setText(get_amount_string(pair.getAmount()));
+
     }
 
     @Override

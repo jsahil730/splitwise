@@ -16,6 +16,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ActionBar"/>
         <activity
+            android:name=".friend_ui.NonGroupTransactions"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
             android:name=".group_ui.SelectTransactionUsersGroup"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ActionBar" />
