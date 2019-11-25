@@ -1207,7 +1207,7 @@ public class FirestoreHelper {
             IdAmountDocPair targetUser= user1.first;
 
             String targetId= targetUser.getId();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             String strDate = dateFormat.format(date);
 
             ActivityTypeDoc activity= new ActivityTypeDoc(groupId, description, targetUser.getAmount(), tag, strDate);
